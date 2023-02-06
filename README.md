@@ -1,5 +1,9 @@
 Projecto node
 
-- template enginnes (pug)
+introduccion:
 
-feature-001:templates engines
+- template enginnes (pug)
+- Model View Controller (MVC)
+  - agregue contolador y ruta usuario
+
+feature-001:introduccion

@@ -1,14 +1,11 @@
 import express from "express";
+import { formularioLogin } from "../controllers/usuarioController.js";
+
 const router = express.Router();
 
 //routing
-router.get("/login", (req, res) => {
-  //req: lo que le mando al servidor de node
-  //res: lo que responde el servidor de node
-  res.render("auth/login", {
-    autenticado: false,
-  });
-});
+router.get("/login", formularioLogin);
+
 router.post("/", (req, res) => {
   res.json({ mensaje: "hola mundo en expres2 con post" });
 });
