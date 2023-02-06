@@ -12,11 +12,11 @@ const app = express();
 app.set("view engine", "pug");
 app.set("views", "./views");
 
-//routing
-app.use("/auth", usuarioRoutes);
-
 //Carpeta Publica
 app.use(express.static("public"));
+
+//routing
+app.use("/auth", usuarioRoutes);
 
 //deinir un puerto y arrancarlo
 const port = 3200;
