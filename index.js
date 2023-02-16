@@ -8,10 +8,12 @@ import db from "./config/db.js";
 
 //crear app-----------------------------
 const app = express();
-
+//habilitar lectura de datos de formularios-------
+app.use(express.urlencoded({ extended: true }));
 //conexion a base de datos:-----------------------------
 try {
   await db.authenticate();
+  await db.sync({ force: true });
   console.log("Connection database kenneth has been established successfully.");
 } catch (error) {
   console.error("Unable to connect to the database:", error);
@@ -22,6 +24,9 @@ app.set("view engine", "pug");
 app.set("views", "./views");
 
 //Carpeta Publica-----------------------------
+app.get("/", (req, res) => {
+  res.json({ mensaje: "hola mundo en expres2 con post" });
+});
 app.use(express.static("public"));
 
 //routing-----------------------------
