@@ -4,21 +4,30 @@ import express from "express"; // ECMAScript modules
 //forma1:
 import usuarioRoutes from "./routes/usuarioRoutes.js";
 //forma2: import router from "./routes/usuarioRoutes.js";
+import db from "./config/db.js";
 
-//crear app
+//crear app-----------------------------
 const app = express();
 
-//pug
+//conexion a base de datos:-----------------------------
+try {
+  await db.authenticate();
+  console.log("Connection database kenneth has been established successfully.");
+} catch (error) {
+  console.error("Unable to connect to the database:", error);
+}
+
+//pug-----------------------------
 app.set("view engine", "pug");
 app.set("views", "./views");
 
-//Carpeta Publica
+//Carpeta Publica-----------------------------
 app.use(express.static("public"));
 
-//routing
+//routing-----------------------------
 app.use("/auth", usuarioRoutes);
 
-//deinir un puerto y arrancarlo
+//deinir un puerto y arrancarlo-----------------------------
 const port = 3200;
 
 app.listen(port, () => {

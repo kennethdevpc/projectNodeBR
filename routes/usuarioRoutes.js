@@ -12,7 +12,7 @@ router.get("/login", formularioLogin);
 router.get("/registro", formularioRegistro);
 router.get("/olvide-password", formularioOlvidePassword);
 
-router.post("/", (req, res) => {
+router.get("/", (req, res) => {
   res.json({ mensaje: "hola mundo en expres2 con post" });
 });
 
