@@ -11,5 +11,6 @@ introduccion:
   - referenciando rutas a login,registro y olvido
   - agregando sequalize y un modelo
   - registrar los datos desde el formulario
+  - express-validator, y validacion de usuarios repetidos
 
 feature-001:introduccion
