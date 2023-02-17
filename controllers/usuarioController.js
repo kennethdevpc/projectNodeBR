@@ -46,7 +46,12 @@ const registrar = async (req, res) => {
     });
   }
   //return;
-  //const usuario = await Usuario.create(req.body);
+  const usuario = await Usuario.create({
+    nombre,
+    email,
+    password,
+    token: 123,
+  });
 
   //res.json(usuario);
 

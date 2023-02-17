@@ -12,5 +12,6 @@ introduccion:
   - agregando sequalize y un modelo
   - registrar los datos desde el formulario
   - express-validator, y validacion de usuarios repetidos
+  - hasheo de contraseña
 
 feature-001:introduccion
