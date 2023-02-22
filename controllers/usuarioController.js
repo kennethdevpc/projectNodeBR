@@ -1,6 +1,6 @@
 import Usuario from '../models/Usuario.js';
 import { check, validationResult } from 'express-validator';
-import { where } from 'sequelize';
+import { generarId } from '../helpers/token.js';
 const formularioLogin = (req, res) => {
   //req: lo que le mando al servidor de node
   //res: lo que responde el servidor de node
@@ -46,16 +46,19 @@ const registrar = async (req, res) => {
     });
   }
   //return;
+
+  //-----------almacenar usuario
   const usuario = await Usuario.create({
     nombre,
     email,
     password,
-    token: 123,
+    token: generarId(),
   });
 
   //res.json(usuario);
 
   // res.json({ mensaje: "se hizo post", data: req.data });
+  //------------Mostrar mensaje de confirmacion
 };
 const formularioOlvidePassword = (req, res) => {
   res.render('auth/olvide-password', {

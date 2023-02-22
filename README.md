@@ -13,5 +13,6 @@ introduccion:
   - registrar los datos desde el formulario
   - express-validator, y validacion de usuarios repetidos
   - hasheo de contraseña
+  - token unico
 
 feature-001:introduccion
