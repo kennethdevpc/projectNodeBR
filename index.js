@@ -33,7 +33,7 @@ app.use(express.static('public'));
 app.use('/auth', usuarioRoutes);
 
 //deinir un puerto y arrancarlo-----------------------------
-const port = 3300;
+const port = process.env.PORT || 3300;
 
 app.listen(port, () => {
   console.log(`el servidor esta en ${port}`);
