@@ -1,10 +1,13 @@
 import express from 'express';
 import {
+  comprobarToken,
   confirmar,
   formularioLogin,
   formularioOlvidePassword,
   formularioRegistro,
+  nuevoPassword,
   registrar,
+  resetPassword,
 } from '../controllers/usuarioController.js';
 
 const router = express.Router();
@@ -15,6 +18,10 @@ router.get('/registro', formularioRegistro);
 router.post('/registro', registrar);
 router.get('/confirmar/:token', confirmar);
 router.get('/olvide-password', formularioOlvidePassword);
+router.post('/olvide-password', resetPassword);
+//almacenar nuevo password
+router.get('/olvide-password/:token', comprobarToken);
+router.post('/olvide-password/:token', nuevoPassword);
 
 router.get('/', (req, res) => {
   res.json({ mensaje: 'hola mundo en expres2 con post' });

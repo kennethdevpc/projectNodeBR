@@ -4,6 +4,7 @@ introduccion:
 
 - template enginnes (pug)
 - Model View Controller (MVC)
+
   - agregue contolador y ruta usuario
   - taildwind configuracion inicial
   - creando un layout principal
@@ -16,5 +17,7 @@ introduccion:
   - token unico
   - creo carpeta de templates en la vistas, nodemailer, confirmacion de token y validacion cuenta
   - validacion seguridad con CSRF
+
+  ## resteo password:
 
 feature-001:introduccion
