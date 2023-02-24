@@ -9,13 +9,15 @@ const formularioLogin = (req, res) => {
     pagina: 'inicion Sesión',
   });
 };
-
+//------get fromulario registro
 const formularioRegistro = (req, res) => {
+  console.log('Token csrf', req.csrfToken());
   res.render('auth/registro', {
     pagina: 'crear cuenta',
+    csrfToken: req.csrfToken(),
   });
 };
-
+//------post fromulario registro
 const registrar = async (req, res) => {
   await check('nombre').notEmpty().withMessage('Nombre no puede ir vacio ').run(req);
   await check('email').isEmail().withMessage('Debe colocar un email valido ').run(req);
@@ -23,6 +25,7 @@ const registrar = async (req, res) => {
   await check('repetir_password').equals(req.body.password).withMessage('password diferente?').run(req);
   let resultado = validationResult(req);
 
+  //__________comprobando si el formlario es vacio
   if (!resultado.isEmpty()) {
     return res.render('auth/registro', {
       pagina: 'crear cuenta',
@@ -31,15 +34,17 @@ const registrar = async (req, res) => {
         nombre: req.body.nombre,
         email: req.body.email,
       },
+      csrfToken: req.csrfToken(),
     });
   }
 
   const { nombre, email, password } = req.body;
   const existeUsuario = await Usuario.findOne({ where: { email } });
-
+  //__________comprobando si el usuario esta reistrado
   if (existeUsuario) {
     return res.render('auth/registro', {
       pagina: 'crear cuenta',
+      csrfToken: req.csrfToken(),
       errores: [{ msg: 'El usuario esta registrado' }],
       usuario: {
         nombre: req.body.nombre,
@@ -47,9 +52,8 @@ const registrar = async (req, res) => {
       },
     });
   }
-  //return;
 
-  //-----------almacenar usuario
+  //___________almacenar usuario
   const usuario = await Usuario.create({
     nombre,
     email,

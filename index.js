@@ -1,5 +1,8 @@
 //const express = require("express"); //CommonJS modules
 import express from 'express'; // ECMAScript modules
+import csurf from 'csurf';
+import cookieParser from 'cookie-parser';
+
 //importando rutas
 //forma1:
 import usuarioRoutes from './routes/usuarioRoutes.js';
@@ -10,6 +13,11 @@ import db from './config/db.js';
 const app = express();
 //habilitar lectura de datos de formularios-------
 app.use(express.urlencoded({ extended: true }));
+//habilitar las cookie parser
+app.use(cookieParser());
+//habilitar el CSRF
+app.use(csurf({ cookie: true }));
+
 //conexion a base de datos:-----------------------------
 try {
   await db.authenticate();

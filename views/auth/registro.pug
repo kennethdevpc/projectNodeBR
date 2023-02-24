@@ -17,6 +17,7 @@ block contenido
       .bg-green.py-3.px-4.shadow
         //form(action="").space-y-2
         form.space-y-2(method="POST" action="/auth/registro")
+          input(type="hidden" name="_csrf" value= csrfToken)
           div 
             label.block.text-md.uppercase.text-gray-500.mb-3.py-3.font-bold(for="nombre") Tu nombre
             input#nombre.w-full.px-3.py-3.border.border-gray-300.rounded-xl.placeholder-green-400(placeholder="Tu nombre" type="text" name="nombre" value= usuario?usuario.nombre:'')

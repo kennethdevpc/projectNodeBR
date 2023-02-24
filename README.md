@@ -15,5 +15,6 @@ introduccion:
   - hasheo de contraseña
   - token unico
   - creo carpeta de templates en la vistas, nodemailer, confirmacion de token y validacion cuenta
+  - validacion seguridad con CSRF
 
 feature-001:introduccion
