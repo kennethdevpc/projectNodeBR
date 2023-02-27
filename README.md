@@ -19,6 +19,7 @@ introduccion:
   - validacion seguridad con CSRF
   - validacion capos login
   - validacion si el usuario existe y contraseña correcta (methodo personalisado en modelo)
+  - autenticacion con JWT y almacenamiento en cookie
 
   ## resteo password:
 

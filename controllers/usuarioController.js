@@ -1,6 +1,8 @@
 import Usuario from '../models/Usuario.js';
 import { check, validationResult } from 'express-validator';
-import { generarId } from '../helpers/token.js';
+import jwt from 'jsonwebtoken';
+// import { Jwt } from 'jsonwebtoken';
+import { generarJWT, generarId } from '../helpers/token.js';
 import { emailRegistro, emailOlvidePassword } from '../helpers/email.js';
 import bcrypt from 'bcrypt';
 
@@ -55,6 +57,17 @@ const autenticar = async (req, res) => {
       csrfToken: req.csrfToken(),
     });
   }
+  //______Autenticar el usuario
+  const token = generarJWT(usuario);
+  console.log('token________________', token);
+  //______Almacenar Cookie
+  return res
+    .cookie('_token', token, {
+      httpOnly: true, //para que el cookie  no sea accesible desde la api de javscript
+      secure: true, //si es https
+      sameSite: true,
+    })
+    .redirect('/mis-propiedades');
 };
 
 //------get fromulario registro
