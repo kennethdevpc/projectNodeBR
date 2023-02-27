@@ -17,6 +17,8 @@ introduccion:
   - token unico
   - creo carpeta de templates en la vistas, nodemailer, confirmacion de token y validacion cuenta
   - validacion seguridad con CSRF
+  - validacion capos login
+  - validacion si el usuario existe y contraseña correcta (methodo personalisado en modelo)
 
   ## resteo password:
 

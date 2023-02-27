@@ -9,8 +9,54 @@ const formularioLogin = (req, res) => {
   //res: lo que responde el servidor de node
   res.render('auth/login', {
     pagina: 'inicion Sesión',
+    csrfToken: req.csrfToken(),
   });
 };
+//------autenticar
+const autenticar = async (req, res) => {
+  //_____validando campos
+  await check('email').isEmail().withMessage('Debe colocar un email valido ').run(req);
+  await check('password').notEmpty().withMessage('password Obligatorio ').run(req);
+
+  let resultado = validationResult(req);
+  //__________comprobando si el formlario es vacio
+  if (!resultado.isEmpty()) {
+    return res.render('auth/login', {
+      pagina: 'inicion Sesión',
+      errores: resultado.array(),
+      csrfToken: req.csrfToken(),
+    });
+  }
+
+  const { email, password } = req.body;
+  //_________validando si ususario existe y si esta confirmado:
+  const usuario = await Usuario.findOne({ where: { email } });
+  if (!usuario) {
+    return res.render('auth/login', {
+      pagina: 'inicion Sesión',
+      errores: [{ msg: 'el ususario no existe' }],
+      csrfToken: req.csrfToken(),
+    });
+  }
+  if (!usuario.confirmado) {
+    return res.render('auth/login', {
+      pagina: 'inicion Sesión',
+      errores: [{ msg: 'el ususario no esta confirmado' }],
+      csrfToken: req.csrfToken(),
+    });
+  }
+
+  //______revisar el password
+
+  if (!usuario.verificarPassword(password)) {
+    return res.render('auth/login', {
+      pagina: 'inicion Sesión',
+      errores: [{ msg: 'la contraseña esta incorrecta' }],
+      csrfToken: req.csrfToken(),
+    });
+  }
+};
+
 //------get fromulario registro
 const formularioRegistro = (req, res) => {
   console.log('Token csrf', req.csrfToken());
@@ -212,6 +258,7 @@ const nuevoPassword = async (req, res) => {
 
 export {
   formularioLogin,
+  autenticar,
   formularioRegistro,
   registrar,
   confirmar,
