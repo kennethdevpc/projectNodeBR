@@ -23,7 +23,7 @@ const emailRegistro = async (datos) => {
             <p>hola ${nombre}, confirma la cuenta </p>
             <p>Tu cuenta ya esta lista , da click en el siguiente enlace 
             <a href="${process.env.BACKEND_URL}:${
-      process.env.PORT || 3300
+      process.env.PORT || 3200
     }/auth/confirmar/${token}">Confirmacion de cuenta </a> </p>
             <p>SI desconoces este procedimiento ignora el mensaje</p>
            </div > `, // html body
@@ -53,7 +53,7 @@ const emailOlvidePassword = async (datos) => {
             <p>hola ${nombre}, Has solicitado restablecer tu password </p>
             <p>Click en el siguiente enlace para generar nueva contraseña
             <a href="${process.env.BACKEND_URL}:${
-      process.env.PORT || 3300
+      process.env.PORT || 3200
     }/auth/olvide-password/${token}">Reestablecer password </a> </p>
             <p>SI desconoces este procedimiento ignora el mensaje</p>
            </div > `, // html body

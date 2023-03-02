@@ -6,6 +6,7 @@ import cookieParser from 'cookie-parser';
 //importando rutas
 //forma1:
 import usuarioRoutes from './routes/usuarioRoutes.js';
+import propiedadesRoutes from './routes/propiedadesRoutes.js';
 //forma2: import router from "./routes/usuarioRoutes.js";
 import db from './config/db.js';
 
@@ -39,9 +40,10 @@ app.use(express.static('public'));
 
 //routing-----------------------------
 app.use('/auth', usuarioRoutes);
+app.use('/', propiedadesRoutes);
 
 //deinir un puerto y arrancarlo-----------------------------
-const port = process.env.PORT || 3300;
+const port = process.env.PORT || 3200;
 
 app.listen(port, () => {
   console.log(`el servidor esta en ${port}`);

@@ -12,6 +12,7 @@ const formularioLogin = (req, res) => {
   res.render('auth/login', {
     pagina: 'inicion Sesión',
     csrfToken: req.csrfToken(),
+    barra: false,
   });
 };
 //------autenticar
