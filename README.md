@@ -21,7 +21,9 @@ introduccion:
   - validacion si el usuario existe y contraseña correcta (methodo personalisado en modelo)
   - autenticacion con JWT y almacenamiento en cookie
   - creando el elemento de propiedades y unicamente el boton de publicar propiedades, ademas el header
+  - 
+  - inicio crear propiedad
 
-  ## resteo password:
+    ## resteo password:
 
 feature-001:introduccion

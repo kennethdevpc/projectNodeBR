@@ -105,3 +105,8 @@ dist
 
 # package-lock.json
 package-lock.json
+.idea/bienesraices_mvc.iml
+.idea/modules.xml
+.idea/php.xml
+.idea/vcs.xml
+.idea

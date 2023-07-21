@@ -3,6 +3,12 @@ const admin = (rew, res) => {
     pagina: 'mis propiedades',
     barra: true,
   });
-  res.send('Mis propiedades');
 };
-export { admin };
+//fiormlario para crear propiedad
+const crear = (rew, res) => {
+  res.render('propiedades/crear', {
+    pagina: 'Crear propiedad',
+    barra: true,
+  });
+};
+export { admin, crear };
