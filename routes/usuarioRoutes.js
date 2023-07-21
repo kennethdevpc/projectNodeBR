@@ -1,23 +1,32 @@
-import express from "express";
+import express from 'express';
+import {
+  autenticar,
+  comprobarToken,
+  confirmar,
+  formularioLogin,
+  formularioOlvidePassword,
+  formularioRegistro,
+  nuevoPassword,
+  registrar,
+  resetPassword,
+} from '../controllers/usuarioController.js';
+
 const router = express.Router();
 
 //routing
-router.get("/", (req, res) => {
-  //req: lo que le mando al servidor de node
-  //res: lo que responde el servidor de node
-  res.send("hola mundo en expres");
-});
-router.post("/", (req, res) => {
-  res.json({ mensaje: "hola mundo en expres2 con post" });
-});
+router.get('/login', formularioLogin);
+router.post('/login', autenticar);
+router.get('/registro', formularioRegistro);
+router.post('/registro', registrar);
+router.get('/confirmar/:token', confirmar);
+router.get('/olvide-password', formularioOlvidePassword);
+router.post('/olvide-password', resetPassword);
+//almacenar nuevo password
+router.get('/olvide-password/:token', comprobarToken);
+router.post('/olvide-password/:token', nuevoPassword);
 
-router
-  .route("/rutasResumen")
-  .get((req, res) => {
-    res.send("hola desde ruta rutas resumen");
-  })
-  .post((req, res) => {
-    res.json("hola desde ruta rutas resumen post ");
-  });
+router.get('/', (req, res) => {
+  res.json({ mensaje: 'hola mundo en expres2 con post' });
+});
 
 export default router;
