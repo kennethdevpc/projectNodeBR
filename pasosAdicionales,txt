@@ -1,0 +1,4 @@
+linea 57:
+c:
+      npm i dotenv
+    n: el dotenv sirve para configurar las variables de entorno

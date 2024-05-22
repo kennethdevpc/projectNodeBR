@@ -33,12 +33,12 @@ app.set('view engine', 'pug');
 app.set('views', './views');
 
 //Carpeta Publica-----------------------------
-app.get('/', (req, res) => {
-  res.json({ mensaje: 'hola mundo en expres2 con post' });
-});
 app.use(express.static('public'));
 
 //routing-----------------------------
+app.get('/', (req, res) => {
+  res.json({ mensaje: 'hola mundo en expres index principal muestra' });
+});
 app.use('/auth', usuarioRoutes);
 app.use('/', propiedadesRoutes);
 
