@@ -1890,7 +1890,34 @@ tailwindcss
     c: npm i -D concurrently
     U: package.json
     s:
-          "dev": "concurrently \"npm run serverkenneth\" \"npm run js\"  "
+          "dev": "concurrently \"npm run css\" \"npm run js\"  "
+
+32) continuo con el mapa: 
+    n: primero agrego los stylos al index principal:
+    u:views/layout/index.pug
+    s: 
+       block styles
+
+  32.1) voy ala pagina de git y copio
+      gist: https://gist.github.com/codigoconjuan/43252f6d5d80dbc0b5f8390086a54ac8
+
+  u: views/propiedades/crear.pug
+  s: ...
+      block styles
+      link(rel="stylesheet" href="https://unpkg.com/leaflet@1.8.0/dist/leaflet.css")
+
+  32.2)
+  u: src/js/mapa.js
+  s: del mapa.js que esta en la pagina
+
+   32.2.1) en:
+   u: views/propiedades/crear.pug
+   n: agrego el mapa
+   s:
+      #mapa.w-xl.h-96
+
+  32.3) para agregar el pin 
+
 
 
 

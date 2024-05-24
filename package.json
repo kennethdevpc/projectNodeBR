@@ -10,7 +10,7 @@
     "serverkenneth": "nodemon index.js",
     "css": "postcss public/css/tailwind.css -o public/css/app.css --watch",
     "js": "webpack --watch",
-    "dev": "concurrently \"npm run serverkenneth\" \"npm run js\"  "
+    "dev": "concurrently  \"npm run js\"  \"npm run css\""
   },
   "keywords": [
     "Mvc",
