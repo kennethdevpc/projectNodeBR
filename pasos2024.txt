@@ -1917,6 +1917,54 @@ tailwindcss
       #mapa.w-xl.h-96
 
   32.3) para agregar el pin 
+  u: src/js/mapa.js
+  s:
+      ...
+      ..
+      // para pin 
+      let marker;
+      ...
+      ..
+      //parapin:
+        marker = new L.marker([lat, lng], //deja centrado esa lat y long
+          {
+            draggable: true, //Sirve para mover el pin
+            autoPan: true    // sirve para poder mover el pin y que se centre el mapa en donde pongo el pin 
+          }
+        ).addTo(mapa)
+
+  32.4) obtener latitud y longitud del pin
+      n: dependiendo donde se ubique el pin de ahi va a tomar esa posicion 
+      u:src/js/mapa.js
+      s: 
+      //Detectar el movimiento del pin
+        marker.on('moveend', function (e) {
+          marker = e.target; // esto seria un objeto de tipo marker y tiene un proto
+          const posicion = marker.getLatLng();
+          console.log(posicion);
+
+          mapa.panTo(new L.LatLng(posicion.lat, posicion.lng)); //toma el mapa que esta y lo reposiciona
+          //con esas cordenadas y lo centra
+        });
+
+  32.5) obtener informacion de la calle al soltar el pin
+
+    u:src/js/mapa.js
+    s:
+      // Utilizar provider y geocoder 
+        const geocoderService = L.esri.Geocoding.geocodeService(); //esto permite obtener el nombre de la calle
+
+        marker.on('moveend', function (e) {
+          ...
+          ..
+          //Obtener la informacion de las calles al soltar el pin (13 es el Zoom) : 
+          //geocoderservice necesita una lat y long para dar referencia de calles y otra informacion adicional 
+          geocoderService.reverse().latlng(posicion, 13).run(function (error, resultado) {
+            console.log(resultado)
+          })
+
+        });
+
 
 
 
