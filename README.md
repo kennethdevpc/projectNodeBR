@@ -23,6 +23,8 @@ introduccion:
   - creando el elemento de propiedades y unicamente el boton de publicar propiedades, ademas el header
   - 
   - inicio crear propiedad
+  - inicio de crear mapa
+  - creacion de archivo que ejecuta varios scrips del packagejson
 
     ## resteo password:
 

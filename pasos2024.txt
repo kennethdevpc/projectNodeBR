@@ -3,6 +3,7 @@ ctrl + p  busca
 password git until mayo:
 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
 
+Siempre debo ejecutar esto parq ue se genere el servidor y los estilos 
 npm run serverkenneth
 npm run css
 
@@ -1822,6 +1823,77 @@ tailwindcss
 		      h1 contenido
 
 
+30) crear compilacion de archivos js
+  n: debo agregar el script:
+  u: views/layout/index.pug
+  s:
+   body.min-h-screen.bg-gray-50
+    ..
+    .
+    block scripts //agregado
+
+  30.1) 
+  u: views/propiedades/crear.pug
+  s:
+    ....
+    block scripts
+        script(src="https://unpkg.com/leaflet@1.8.0/dist/leaflet.js")
+        script(src="https://unpkg.com/esri-leaflet@3.0.8/dist/esri-leaflet.js")
+        script(src="https://unpkg.com/esri-leaflet-geocoder@2.2.13/dist/esri-leaflet-geocoder.js")
+        script(src="https://cdnjs.cloudflare.com/ajax/libs/leaflet-geosearch/2.7.0/bundle.min.js")
+  30.2) intalar web pack para compilar archivos js
+    c:  npm i -D webpack webpack-cli
+
+    n : requiere un archivo de configuracion como tailwind y postcss
+
+    n: creo el archivo:
+    u: webpack.config.js
+    s:
+      export default {
+        mode: 'development',
+        entry: { //estas son las entradas
+         mapa: './src/js/mapa.js'
+         otros_ejemplo: './src/js/mapa.js'
+          
+        },
+        output: {  ///estas son las salidas donde quiero que se almacene despues de haberlo compilado 
+          filename: '[name].js',   //toma el nombre de "mapa" o "otros_ejemplo" y le da el nombre 
+          path: path.resolve('public/js')  //lo resuelve o lo guarda en public
+
+        }
+      }
+
+  30.3) creo unas carpetas: y el archivo 
+    u: src/js/mapa.js
+    s:
+      alert('soy un mapa')
+
+  31.4) voy a packega json y coloco el ejecutabel de webpack
+    s:  "scripts": {
+    .....
+      "js": "webpack --watch" //agregado el watch sirve pa que cada vez que se haya un cambio se re lanse este codigo
+    },
+
+
+    n: ahora puedo ejecutar:
+    c: npm run js
+
+    u: views/propiedades/crear.pug
+    s:
+    block scripts
+    ......
+      script(src="/js/mapa.js")
+
+    n: recargo la pagina y se debe mostrar el mensaje del mapa.js
+
+31) Ejecucion de multiples scrips al mismo tiempo (como npm run serverkenneth y css y js al mismo tiempo)
+    c: npm i -D concurrently
+    U: package.json
+    s:
+          "dev": "concurrently \"npm run serverkenneth\" \"npm run js\"  "
+
+
+
 
 
 
@@ -1974,6 +2046,12 @@ info general) estilos co pug:
             			un signo @
 
             	*) md:gap-3: el gap hace que se separae por ejemplo "abc" en "a b c"
+    *) for en pug y select option: mucha atencion porque si le pones let te va a dar un error le puedes cambiar por "var"
+        select#habitacioens.( name="habitacioens")
+             option(value="") -seleccione-
+             - let n = 1; 
+                while n < 10
+                  option(value=n) #{n++} 
 
 
 
@@ -2035,5 +2113,8 @@ info general) estilos co pug:
 	n:entonces ya se podra mirar la inormacion con saltos de linea
 	por defecto split tiene:
 	splite('\n') entonces es igual a splite()
+
+*) si queiro poer en comillas y que el letro tenga comillas debo usar diagonal invertiddo
+  " xxxx \"texto\"   xxx"
 
 
