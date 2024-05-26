@@ -1,0 +1,2195 @@
+ctrl + tab pasa otra ventanita
+ctrl + p  busca
+password git until mayo:
+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
+
+Siempre debo ejecutar esto parq ue se genere el servidor y los estilos 
+npm run serverkenneth
+npm run css
+
+
+1)▶️ creo carpteta de proyecto-----------------------------Backend🤖️🤖️🤖️🤖️🤖️🤖️🤖️🤖️🤖️🤖️🤖️🤖️🤖️🤖️
+
+2)▶️instalo el package.json-----------------------------Backend🤖️🤖️🤖️🤖️🤖️🤖️🤖️🤖️🤖️🤖️🤖️🤖️🤖️🤖️
+	comando:
+		*	npm init -y
+	nota:
+		* la y sirve para decir que si a todo
+
+3)▶️ intalando dependencia-----------------------------Backend🤖️🤖️🤖️🤖️🤖️🤖️🤖️🤖️🤖️🤖️🤖️🤖️🤖️🤖️
+	c:
+		*	npm i express
+	n:
+		*	npm i D express, se utiliza unicamente si no requiero que
+			en produccion No se instale, ya que es una dependencia de
+			desarroloo
+
+4)▶️ Archivo que llama los demas archivoa(archivo principal)-----------------------------Backend🤖️🤖️🤖️🤖️🤖️🤖️🤖️🤖️🤖️🤖️🤖️🤖️🤖️🤖️
+	pasos:
+		*	creo archivo con el nombre que quiera ejemplo index.js
+			esto con el fin de que este haga el llamado de todo lo demas
+
+5)▶️ en la parte de package.json voy a colocar en scripts siempre lo que voy a iniciar es decir
+     esa parte ejecuta y permite interactuar con los archivos del proyecto-----------------------------Backend🤖️🤖️🤖️🤖️🤖️🤖️🤖️🤖️🤖️🤖️🤖️🤖️🤖️🤖️
+
+	"scripts": {
+	    "test": "echo \"Error: no test specified\" && exit 1",
+	    "start": "node index.js"
+	 },
+  🔺️5.1) ahora para ejecutar
+    c:
+      *	npm run start
+
+
+6)▶️ instalar dependencia de desarrollo nodemon para que se vaya executing todo a lavez -----------------------------Backend🤖️🤖️🤖️🤖️🤖️🤖️🤖️🤖️🤖️🤖️🤖️🤖️🤖️🤖️
+	c:
+		*	npm i D nodemon
+
+	s:
+		"scripts": {
+		    "serverkenneth": "nodemon index.js"
+		  },
+
+  🔺️6.1) ejecutando
+    c:
+      *	npm run serverkenneth
+      
+-------------------importar express-----------------------------Backend🤖️🤖️🤖️🤖️🤖️🤖️🤖️🤖️🤖️🤖️🤖️🤖️🤖️🤖️
+7)▶️ forma de importar express forma1:CommonJS modules esta es lo que use en country  pokemon
+	npm i dotenv
+    n: el dotenv sirve para configurar las variables de entorno
+  u: /bienesraices_mvc/index.js
+	s:
+
+		const express = require("express")
+		//crear app
+		const app = express();
+		//deinir un puerto y arrancarlo
+		const port = 3000;  //aqui se puede colocar el const port = process.env.PORT || 3300;
+		app.listen(port, () => {
+		  console.log(`el servidor esta en ${port}`);
+		});
+
+	n:
+		el puerto se deberia ya dejar con el process.env
+
+	s:
+		const port = process.env.PORT || 3300;
+  🔺️7.1) definiendo rutas con el "app"
+
+    s:
+      //routing
+      app.get("/", (req, res) => {
+        //req: lo que le mando al servidor de node
+        //res: lo que responde el servidor de node
+        res.send("hola mundo en expres");
+        // o para json
+        res.json("hola mundo en expres");
+      });
+      //deinir un puerto y arrancarlo
+
+8)▶️ forma de importar express forma2:ECMAScript modules-----------------------------Backend🤖️🤖️🤖️🤖️🤖️🤖️🤖️🤖️🤖️🤖️🤖️🤖️🤖️🤖️
+
+	en package.json
+		"type": "module",
+
+  🔺️8.1) y ahora en el index.js
+    en vez de:
+    //const express = require("express"); //CommonJS modules
+    se coloca:
+    s:
+
+      import express from "express"; // ECMAScript modules
+
+9)▶️ creando rutas en carpeta routes-----------------------------Backend🤖️🤖️🤖️🤖️🤖️🤖️🤖️🤖️🤖️🤖️🤖️🤖️🤖️🤖️
+	u:bienesraices_mvc/routes/usuarioRoutes.js
+
+	s:
+		import express from "express";//----------------
+		const router = express.Router();//----------------
+
+
+		//routing
+		router.get("/", (req, res) => {
+		  //req: lo que le mando al servidor de node
+		  //res: lo que responde el servidor de node
+		  res.send("hola mundo en expres");
+		});
+		router.get("/newroute", (req, res) => {
+		  res.json({ mensaje: "hola mundo en expres2" });
+		});
+
+		ejemplo forma 2------------si queiro tener rutas anidadas
+
+
+		router.route("/rutasResumen")
+		  .get((req, res) => {
+		    res.send("hola desde ruta rutas resumen");
+		  })
+		  .post((req, res) => {
+		    res.json("hola desde ruta rutas resumen post ");
+		  });
+
+		export default router;//----------------
+
+  🔺️9.1) ahora puedo importar las rutas en el archivo index.js principal:
+  	u:	index.js
+	s:
+		import usuarioRoutes from './routes/usuarioRoutes.js'; 
+		//se puede nombrar como se desee "usuarioRoutes" "cualquierotroname"
+		//routing
+
+		//ojo si uso app.get llama una ruta unica
+		app.get("/", usuarioRoutes);
+
+		//debo usar el .use  ya que asi puede llamar a todas las rutas
+		app.use("/", usuarioRoutes);
+
+10)▶️ feature-001 template engine, para html en servidor
+
+	n:intalar pug
+	c:
+		npm i pug
+
+  🔺️10.1) se añade al index principal:
+    s:
+      app.set("view engine", "pug"); //quiero usar pug
+      app.set("views", "./views"); //carpeta donde se usara vistas
+    
+    🔺️10.1.1)n: creo la carpeta de vistas
+
+	    u: /bienesraices_mvc/views
+	    n: creo el archivo.pug
+	    u: views/auth/login.pug
+	    n: en ese archivo es solo pug
+
+  🔺️10.2) ahora las rutas pueden llamar y renderizar esa vista ademas entregando info
+    bienesraices_mvc/routes/usuarioRoutes.js
+
+    s:
+      //routing
+      router.get("/login", (req, res) => {
+        //req: lo que le mando al servidor de node
+        //res: lo que responde el servidor de node
+        
+        res.render("auth/login", {autenticado: false,  });
+        //autenticado: esLoQueLePasoAl pug quese renderizaEn la vista que se encuentra en views/auth/login
+      });
+      
+    n: route.get|post|put|delete: es para rutas 
+    	res.render: es para llamar las vistas
+
+
+
+    n: si quiero ver(mostrar, recibir, enviada, pasar) la info que se envia
+    desde controlador
+      s:	html
+        h1=autenticado
+
+        forma2: h2.text-center.text-2xl.font-extrabold=pagina
+        forma3: h2.text-center.text-2xl.font-extrabold #{pagina}
+
+11)▶️ MVC-----------------------------Backend🤖️🤖️🤖️🤖️🤖️🤖️🤖️🤖️🤖️🤖️🤖️🤖️🤖️🤖️
+	creando el controlador OJO el controlador se crrea en una nueva carpeta
+	y este se puede exportar
+	u: bienesraices_mvc/controllers
+
+	🔺️forma1-Export default : para exportar una sola funcion, ademas puede ir el nombre que yo desee
+	          ----ASI COMO---- cuando se exporta desde las ----RUTAS---- asi:
+		
+		script-ejemplo:
+		u: /controllers/usuarioController.js
+
+		s:
+			import express from "express";
+			const router = express.Router();
+			router.get("/", (req, res) => {
+			  res.json({ mensaje: "hola mundo" });
+			});
+
+			export default router;
+
+		s:
+			export default nombreCualquiera
+
+	🔺️forma2-Export{funcion}: el nombre exportado debe ser igual al nombre de la funcion.
+	se le llama "export nombrado"
+
+		s:
+			const formularioLogin = (req, res) => {
+			  res.render("auth/login", {	//aqui se llama la vista
+			    autenticado: false,
+			  });
+			};
+
+			export {
+			  formularioLogin
+			};
+
+  🔺️11.1) ahora se puede importar el controlador alas rutas:
+
+    u: bienesraices_mvc/routes/usuarioRoutes.js
+    
+    s:🔺️forma1-Export default
+      import formularioLogin  from "../controllers/usuarioController.js";
+
+      //routing
+      router.get("/login", formularioLogin);
+
+    s:🔺️forma2-Export{funcion}
+      import { formularioLogin } from "../controllers/usuarioController.js";
+
+      //routing
+      router.get("/login", formularioLogin);
+
+  🔺️11.2) resumen de agregando RUTAS Y VISTAS:
+  	- index principal:
+		//pug
+		app.set("view engine", "pug");
+		app.set("views", "./views");
+  
+      a) creo controlador:creo una funcion con las rutas y llamando a la vista desde el folder
+      que se encuentra las vistas por ejemplo la vista " views/auth/login.pug"
+        s:
+        const formularioLogin = (req, res) => {
+          //req: lo que le mando al servidor de node
+          //res: lo que responde el servidor de node
+          res.render('auth/login', {	//aqui se llama la vista
+            pagina: 'inicion Sesión',
+            csrfToken: req.csrfToken(),
+            barra: false,
+          });
+        };
+        
+      b) creo la vista en :
+        ----
+        u: bienesraices_mvc/views/auth/
+        ----:
+        ejm:
+          login.pug
+
+      c) llamo en las rutas a el controlador:
+        ejem:
+          router.get("/login", formularioLogin);
+
+
+-------------------------------------------------------------------
+tailwindcss
+
+12)▶️ intalando tailwind solo se intala en desarrollo
+
+	c:
+		npm i -D tailwindcss autoprefixer postcss postcss-cli
+
+
+  🔺️12.1) tengo que decirle a node donde es que va  a encontrar los archivos estaticos
+        imagenes fotos, etc.
+
+        en el index principal:
+        ----
+        u: /bienesraices_mvc/index.js
+        ----:
+
+        s: 	//Carpeta public
+            app.use(express.static("public"));
+
+  🔺️12.1.2) creo la carpeta public con los 3 archivos:
+    U: public/css
+    U: public/img
+    U: public/js
+
+    n: en U: public/css creo 2 archivos
+    --- "app.css" es donde llega el compilado de taildwind 
+    (ojo este se crea añl ejecutar el coimapndo del punto 12.5 osea no lo debo crear yo) 
+    y
+    --- el otro "tailwind.css" es un archivo para las directivas de tailwind:
+    
+    u: /public/css/app.css
+    n:no se hace nada solo se ejecuta cuando iniciamos el compilado punto 12.4)
+     
+    u: /public/css/tailwind.css
+    s:
+      @tailwind base;
+      @tailwind components;
+      @tailwind utilities;
+
+  🔺️12.2) luego crear los archivos postcss.config.js y uno llamado tailwind.config.js:
+    c:
+      npx tailwindcss init -p
+
+    n: le cambio el .js por .cjs
+
+	  🔺️12.2.2) en el archivo: es para decirle donde guardes las clases de tailwind
+	    ----
+	    u :  /bienesraices_mvc/tailwind.config.cjs
+	    ----:
+	    s:
+	      content: ["./views/**/*.pug"],
+
+  🔺️12.4) en el package.json: como instalamos "postcss" ese nos
+    crea un ejecutable para tailwind algo parecido a nodemon y
+    que permite compilar tailwind (esta en el nodemodules)
+    u:bienesraices_mvc/package.json
+    s:
+      "scripts": {
+        ?????
+          "css": "postcss public/css/tailwind.css -o public/css/app.css --watch"
+        },
+
+    donde:
+      -o significa que la configuracion la compila y la envia  a app.css
+
+      --watch para que al ejecutar npm run css se ejecute siempre.
+
+  🔺️12.5) ejecuto en terminal:
+    c:
+      npm run css
+    Error:
+      1) error npm run css.png:
+
+      si aparece algun error que dice que no acepta .js porque en package
+      colocamos type:module:
+      ----
+      Documentos/individual_projects/bienesraices_mvc_captures/1)
+      ----
+
+    solucion:
+        cambiar el formato ".js" por "cjs"
+    c:npm run css
+    n:esto crea el app.css en css (u: /public/css/app.css )
+
+13)▶️ creando un layout principal intalar:
+	n: creo el layout prrincipal:
+	u:/views/layout
+
+	instalar extension de visual studio code:
+			-pug
+			-Tailwind CSS IntelliSense
+
+  🔺️13.1) creo el archivo:
+    u: /views/layout/index.pug
+      s:
+        ! //el cual despliega estructura basica de pug
+
+  🔺️13.2) modifico ese layout:
+      s:
+        doctype html
+        html(lang="en")
+          head
+            .
+            .
+            .
+            title Bienes raices | //modificado
+            link(rel="stylesheet", href="/css/app.css") //modificado
+          body.min-h-screen.bg-gray-50		//modificado
+
+  🔺️13.3) y en la vista se debe de importar y usar asi:
+    ----
+    u: bienesraices_mvc/views/auth/login.pug
+    ----:
+
+    s:
+      extends ../layout/index
+
+      div
+        h2.text-center Iicio de seccion
+
+    Error:
+      1) al ir por ejemplo a la ruta que llama esa vista e(en el servidor en goolge) " auth/login":
+
+      Only named blocks and mixins can appear at the top level of
+      an extending template
+      ----
+      Documentos/individual_projects/bienesraices_mvc_captures/2)
+      ----
+
+    solucion:
+        se debe de colocar en:
+        ----
+        bienesraices_mvc/views/layout/index.pug
+        ----:
+        un bloque de contenido para que se pueda llamar
+        despues del codigo inicial el resto de codigo que deseo
+        agregar.
+
+
+      s:
+        .
+        codigo inicial..
+        .
+        .
+        link(rel="stylesheet", href="/css/app.css")
+        //Agrego:
+
+          body.min-h-screen.bg-gray-50
+            if barra
+            include header
+
+            main(class="mx-auto container mt-10 px-2")
+                block contenido
+          .
+          .
+          //fin agregado
+
+      n:
+        luego en:
+        ----
+        /bienesraices_mvc/views/auth/login.pug
+        ----:
+
+        se puede llamar:
+
+      s:
+        extends ../layout/index 	//agregado
+        block contenido    		//agregado
+          div
+            h2.text-center Iicio de seccion
+
+    🔺️🔺️13.3.1) si yo mando parametros desde el controlador como autenticado: lo puedo ver el la vista
+    que se renderiza pero tambien en el layout principal:
+    entonces desde el controlador por ejemplo:
+      u:controllers/usuarioController.js
+      s:
+      ...
+        const formularioRegistro = (req, res) => {
+          console.log('Token csrf', req.csrfToken());
+          res.render('auth/registro', {
+            pagina: 'crear cuenta',
+            csrfToken: req.csrfToken(),
+          });
+        };
+
+      n: le mando pagina dese el controlador y puedo modificar el title
+      del navegador(letrero de pestañita)
+      u: bienesraices_mvc/views/layout/index.pug
+      s:
+        .
+        .
+        title Bienes raices | #{pagina}
+        .
+        .
+
+  🔺️13.2) yo puedo colocar por ejemplo:
+    s:
+
+      .mt-8
+
+    n:
+      esto me genera un div automaticamente
+      ya que no tiene ninguna etiqueta asi
+      que escoje un div por defecto
+
+      como por ejemplo:  "div.mt-8" uno se evita colocar el div
+
+14)▶️ creo las vistas y las referencio con "href"
+
+  🔺️14.1) creo el formulario de pug:
+	u:/home/kenneth/Documentos/individual_projects/bienesraices_mvc/views/auth/registro.pug
+
+  formas de estilos ,styles
+  *para usar los hover en pug se usa clases:
+
+    input(class="w-full bg-indigo-600 hover:bg-fuchsia-700 text-white font-bold cursor-pointer
+    py-3" type="submit" value="crear cuenta" )
+
+  * para agregar propiedades: con parentesis()
+
+    (placeholder="Tu password" type="password" name="repetir_password")
+
+  * para estilos tambien se puede usar con punto .
+
+    input#password.w-full.px-3.py-3.border.border-gray-300.rounded-xl.placeholder-green-400
+
+
+  debo crear formulario de registro, olvide password y login
+
+15)▶️ intalando orm "sequelize"-----------------------------Backend🤖️🤖️🤖️🤖️🤖️🤖️🤖️🤖️🤖️🤖️🤖️🤖️🤖️🤖️
+	c:
+		npm i sequelize mysql2
+
+16)▶️ ahora creo la carpeta de configuracion y base de datos.----------------------------Backend🤖️🤖️🤖️🤖️🤖️🤖️🤖️🤖️🤖️🤖️🤖️🤖️🤖️🤖️
+
+	carptea:
+			config
+	archivo:
+		n: dentro de config creo archibo
+
+		archivo: db.js
+
+17) configuradno db:----------------------------Backend🤖️🤖️🤖️🤖️🤖️🤖️🤖️🤖️🤖️🤖️🤖️🤖️🤖️🤖️
+
+	s:
+		import { Sequelize } from "sequelize";
+
+		const db = new Sequelize("bienesraices_node_mvc", "root", "123456", {
+		  host: "localhost",
+		  dialect: "mysql",
+		  port: 3306,
+		  define: {
+		    timestamps: true,
+		  },
+		  pool: {
+		    //como va  a ser el comportamiento para la conexiones nuevas o existentes
+		    max: 5, //maximo de conexiones
+		    min: 0,
+		    acquire: 30000, //30 seg tratando de hacer una conexion para marcar un error de conexion
+		    idle: 10000, //10 seg si nadie esta usando el proyecto libera la conexion
+		  },
+		  operatorsAliases: false, //lo marco en falso para que no utilice los aliaces
+		});
+		export default db;
+
+16) en el index:----------------------------Backend🤖️🤖️🤖️🤖️🤖️🤖️🤖️🤖️🤖️🤖️🤖️🤖️🤖️🤖️
+  16.1)
+	s:
+    import db from './config/db.js';
+		//conexion a base de datos:-----------------------------
+		try {
+		  await db.authenticate();
+		  console.log("Connection database kenneth has been established successfully.");
+		} catch (error) {
+		  console.error("Unable to connect to the database:", error);
+		}
+
+  16.2) configurando las variables de entorno:
+    c:
+      npm i dotenv
+    n: el dotenv sirve para configurar las variables de entorno
+
+  16.3) creo archivo ".env"
+
+  16.4) me voy a el codigo db.js: bienesraices_mvc/config/db.js
+    s:
+      ...
+      ..
+      import dotenv from "dotenv";
+      dotenv.config({ path: ".env" });
+
+      const db = new Sequelize(
+        process.env.BD_NOMBRE,
+        process.env.BD_USER,
+        process.env.BD_PASS ?? "",
+        {
+          host: process.env.BD_HOST, ...
+      ..
+      ...
+      )
+
+17) ------creando modelos----------------------------Backend🤖️🤖️🤖️🤖️🤖️🤖️🤖️🤖️🤖️🤖️🤖️🤖️🤖️🤖️
+	creo carpeta modelos y luego un archivo con el nombre del modelo en Mayuscula:
+	u:
+		individual_projects/bienesraices_mvc/models/Usuario.js
+
+	s:
+		import { DataTypes } from "sequelize";
+		import bd from "../config/db.js";
+		const Usuario = db.define("usuarios", {
+		nombre: {
+		    type: DataTypes.STRING,
+		    allowNull: false,
+		  },});
+		  token: DataTypes.STRING,
+		  confirmado: DataTypes.BOOLEAN,
+		  ....
+
+18) 	creando metodo POST	-----------------------
+	s:
+		 en los formularios :
+		   form.space-y-2(method="POST" action="/auth/registro")
+  18.0)	se debe colocar en el index la habilitacion de datos por body:(req.body)
+    u: 	/bienesraices_mvc/index.js
+    s:
+      //habilitar lectura de datos de formularios-------
+      app.use(express.urlencoded({ extended: true }));
+
+  18.1) en las rutas:
+    u: routes/usuarioRoutes.js
+    s:
+      router.post("/registro", registrar);
+
+  18.2) en el contorolador:
+  u: controllers/usuarioController.js
+	s:
+		import Usuario from '../models/Usuario.js';
+
+
+		const registrar = (req, res) => {
+		  const { nombre, email, password } = req.body;
+
+		  console.log("ffff", req.body);
+		  const usuario = await Usuario.create({nombre,email,password});
+		  // res.json({ mensaje: "se hizo post", data: req.data });
+		};
+
+19) ahora voy a registrar los datos desde el formulario desdd front:
+
+	errro:
+		si sale el sigueite error:
+		original: Error: Table 'bienesraices_node_mvc.usuarios' doesn't
+		exist at Packet.asErro........
+		link:
+		   https://sequelize.org/docs/v6/core-concepts/model-basics/#synchronizing-all-models-at-once
+		n:
+			eso significa que no se ha creado la tabla en la base de datos(la tabla de usuarios"
+			por lo tanto se debe colocoar el codigo que aclare la tabla o la migracion de tablas a
+			la base de datos y eso se hace en el script:
+
+		l:	/bienesraices_mvc/index.js
+
+		s:
+		//conexion a base de datos:-----------------------------
+			try {
+			  await db.authenticate();
+			  await db.sync({ force: true });   //agregado---------------------------
+			  console.log("Connection database kenneth has been established successfully.");
+			}...... database:", error);
+			}
+
+20) trabajando con validaciones express-validator, y validacion de usuarios repetidos intalacion:
+	c:---------------------------Backend🤖️🤖️🤖️🤖️🤖️🤖️🤖️🤖️🤖️🤖️🤖️🤖️🤖️🤖️
+		npm i express-validator
+  20.1) me dirijo al crontorlador donde relaizo la validacion despues de un post:
+    u:
+      bienesraices_mvc/controllers/usuarioController.js
+    s:
+      //revisar campo especific | guarda resultado de validacion
+      import { check, validationResult } from "express-validator";
+
+  20.2) ejemplo de como hacer la validacion:
+    s:
+
+      const registrar = async (req, res) => {
+        await check('name').notEmpty().withMessage('Nombre no puede ir vacio ""').run(req);
+
+        let resultado = validationResult(req);
+
+        y si hay errrores de validacion, verificar que el "resultado", este vacio:
+        s:
+          if (!resultado.isEmpty()) {
+            return res.render('auth/registro', { //le paso estas propiedades
+              pagina: 'crear cuenta',		//le paso el titulo
+              errores: resultado.array(),        	//le paso los errores
+              usuario: {
+                nombre: req.body.nombre,
+                email: req.body.email,
+              },
+            });
+          }
+    
+    si no quiero que salgan esos @email no permite carcaterees xxxx voy al formulario y le pongo al form esto:
+    u: ejemplo
+      bienesraices_mvc/views/auth/registro.pug
+    s: form.space-y-2(method="POST" action="/auth/registro" novalidate)
+    n: se usa el novalidate
+
+  20.3) ahora en el front en la vista puedo colocar  a imprimir  esos errores
+    s:
+
+      if (errores)
+            div(class="mx-auto max-w-md my-10")
+            each error in errores
+        p.bg-red-600= error.msg
+
+          n: para que no se borren los datos ya dijitados se coloca el value en el pug:
+
+            s:
+              input#nombre(placeholder="Tu nombre" type="text" name="nombre" value= usuario?
+              usuario.nombre)
+
+        n: aquie es importante colocar el validador ? para que nsi no hay dato no hay error en html
+
+  20.4) validando que no exista el mismo usuario con un email igual por ejemplo:
+    ubicacion:bienesraices_mvc/controllers/usuarioController.js
+    s:
+      email=req.body.email
+      const existeUsuario = await Usuario.findOne({ where: { email } });
+
+      if (existeUsuario) {
+          return res.render('auth/registro', {
+            pagina: 'crear cuenta',
+            csrfToken: req.csrfToken(),
+            errores: [{ msg: 'El usuario esta registrado' }],
+            usuario: {
+        nombre: req.body.nombre,
+        email: req.body.email,
+            },
+          });
+        }
+
+21) hashear la contraseña, primero instalar bycript:---------------------------Backend🤖️🤖️🤖️🤖️🤖️🤖️🤖️🤖️🤖️🤖️🤖️🤖️🤖️🤖️
+	c:
+		npm i bcrypt
+ 21.1) en el archivo del modelo hay unos hooks que puedo utilizar y uno es el "beforecreate" entonces:
+ 	u: bienesraices_mvc/models/Usuario.js
+ 	s:
+ 		import bcrypt from 'bcrypt';
+ 		const Usuario = db.define('usuarios',
+		  {...
+		  },
+		  {
+		    hooks: {
+		      beforeCreate: async function (usuario) {
+			      const salt = await bcrypt.genSalt(10); // rondas de hasheo entre mas
+						                                        	grade mas seguro pero no es buenocolocar muy grande
+			      usuario.password = await bcrypt.hash(usuario.password, salt);
+		      },
+		      },
+		    },
+		  }
+		);
+		export default Usuario;
+
+	n:
+		como esto se ejecuta antes de todo pues lo que hace es que se toma ese modelo que se envio
+		por el formulario y lo que se hace es tomarlo para hasharle la contraseña
+	n: ahora en el controaldor pues creo el usuario obviamente:
+	u
+		:bienesraices_mvc/controllers/usuarioController.js
+	s:
+
+		 const usuario = await Usuario.create({
+		    nombre,
+		    email,
+		    password,
+
+		  });
+
+22)token unico:{
+
+  22.1) crear carpeta helper:---------------------------Backend🤖️🤖️🤖️🤖️🤖️🤖️🤖️🤖️🤖️🤖️🤖️🤖️🤖️🤖️
+    u: 	/bienesraices_mvc/helpers/token.js
+    n:
+      son funciones que podemos usar en diferrntes lugares, para no cargar tanto al controlador
+    s:
+      const generarId = () => Math.random().toString(32).substring(2) + Date.now().toString(32);
+      export {  generarId };
+
+  22.2) generando token de tipo id.
+
+    n:
+      dentro del helper creo la FUNCION qe permite generar un token unico.
+
+  22.3) imporot la funcion en el controlador que logea al usuario
+    u: 	bienesraices_mvc/controllers/usuarioController.js
+
+    n: importo la funcion generar token.
+    s:
+      import { generarId } from '../helpers/token.js';
+
+
+  22.4) en la parte de token, se agrega la funcion de generar token :
+	u: 	bienesraices_mvc/controllers/usuarioController.js
+	s:
+		const usuario = await Usuario.create({
+		    nombre,
+		    email,
+		    password,
+		    token: generarId(),
+		  });
+}
+
+---------------Mostrar mensaje de confirmacion
+23) creacion de carpeta de templates en la vistas, nodemailer, confirmacion de token y validacion cuenta:
+
+	u: /bienesraices_mvc/views/templates/
+
+
+  23.0) intalo nodemailer para envio de mensajes:--------Backend🤖️🤖️🤖️🤖️🤖️🤖️🤖️🤖️🤖️🤖️🤖️🤖️🤖️🤖️
+
+    c:
+      npm i nodemailer
+
+
+  23.1) menssaje de confirmacion:
+    n: creo el archivo de mensaje
+
+    u: 	bienesraices_mvc/views/templates/mensaje.pug
+    s:	➡️
+      extends ../layout/index
+
+      block contenido
+        div
+          h1.text-3xl.my-15.text-center.font-extrabold Bienes
+            sapan.font-normal Raices
+          h2.text-center.text-2xl.font-extrabold #{pagina}
+
+          p.text-xl.font-bold.text-center.my-10= mensaje
+      ⬅️
+
+    n: en el controlador mando esa vista:-----------------Backend🤖️🤖️🤖️🤖️🤖️🤖️🤖️🤖️🤖️🤖️🤖️🤖️🤖️🤖️
+
+    u:/controllers/usuarioController.js
+    s:	➡️
+      //------------Mostrar mensaje de confirmacion
+        res.render('templates/mensaje', {
+          pagina: 'CEnvio de reestablecimiento de contraseña',
+          mensaje: 'hemos enviado un Email de restablecimiento de contraseña',
+        });
+      ⬅️
+
+  --------envio de mails con nodemailer y mailtrap
+  23.2) mailtrap para envio de mails de prueba.------------Backend🤖️🤖️🤖️🤖️🤖️🤖️🤖️🤖️🤖️🤖️🤖️🤖️🤖️🤖️
+    url: https://mailtrap.docs.apiary.io/#reference/message
+    n:
+      me diijo a la aplicacion https://mailtrap.io/inboxes
+      mi usuario es la cuenta de google kennethdevpc
+    n:
+      creo un nuevo inbox. y entro dentro de ese project
+    n:
+      me dirijo a donde dice: STMP settings , integrations,  y escojo nodemailer
+      captura: 1) individual_projects/bienesraices_mvc_captures/img-steps
+    me debe sacar algo como:
+
+    s:
+      var transport = nodemailer.createTransport({
+        host: "sandbox.smtp.mailtrap.io",
+        port: 2525,
+        auth: {
+          user: "9187aba17a5c2c",
+          pass: "06ed2bf497184e"
+        }
+      });
+
+  23.3) me dirijo a el .env
+    s:
+      EMAIL_HOST=sandbox.smtp.mailtrap.io
+      EMAIL_PORT=2525
+      EMAIL_USER=9187aba17a5c2c
+      EMAIL_PASS=06ed2bf497184e
+
+  23.4) creo en los helpers el email
+    u: 	bienesraices_mvc/helpers/email.js
+    n:
+      se importa nodemailer y se crea la funcion de envio de email
+
+    s:
+      import nodemailer from 'nodemailer';
+
+      const emailRegistro = async (datos) => {
+        const transport = nodemailer.createTransport({
+          host: process.env.EMAIL_HOST,
+          port: process.env.EMAIL_PORT,
+          auth: {
+            user: process.env.EMAIL_USER,
+            pass: process.env.EMAIL_PASS,
+          },
+        });
+
+        const { nombre, email, token } = datos;   //eestos datos se enteregan en el econtroler 23.5)
+        //enviar email
+
+        // send mail with defined transport object
+
+        let info = await transport.sendMail({
+          from: '"Fred Foo 👻" <BienesRaices.com>', // sender address
+          to: email,				 // list of receivers
+          subject: 'Confirmacion cuenta en bienes raices ✔', // Subject line
+          text: 'Confirmacion cuenta en bienes raices ✔', // plain text body
+          html: `<div>
+            <p>hola ${nombre}, confirma la cuenta </p>
+            <p>Tu cuenta ya esta lista , da click en el siguiente enlace
+            <a href="">Confirmacion de cuenta </a> </p>
+            <p>SI desconoces este procedimiento ignora el mensaje</p>
+          </div > `, // html body
+        });
+      };
+
+      export { emailRegistro };
+
+  23.5) me dirijo al controlador y llamo la funcion de envio de mensaje pasandole los parametros:
+    u:	bienesraices_mvc/controllers/usuarioController.js
+
+    s:
+      ....almacenar usuario....
+      .....
+      ➡️
+      import { emailRegistro,  } from '../helpers/email.js';
+
+      //------------envio de email de confirmacion
+        emailRegistro({
+          nombre: usuario.nombre,
+          email: usuario.email,
+          token: usuario.token,
+        });
+
+        ⬅️
+        .....
+        .....-----Mostrar mensaje de confirmacion
+        res.render('templates/mensaje', {
+          pagina: 'Cuenta creada correctamente',
+        ....
+    n: pruebo lleno formulario y miro el email sillega
+
+  23.6) creo una confirmacion: leer el token video 44
+
+    n:
+      en el contorlador:/bienesraices_mvc/controllers/usuarioController.js
+
+    s: 	......
+      const registrar = async (req, res) => {.....}
+      ➡️
+      //funcion que comprueba cuenta
+
+      const confirmar = (req, res) => {
+        const { token } = req.params;        // esto lo que hace es recibir un params desde 23.7)
+        console.log('confirmando...', token);
+      };
+
+
+      .....
+      export { formularioLogin, formularioRegistro, registrar, confirmar, formularioOlvidePassword };
+
+      ⬅️
+
+  23.7) ahora en la ruta de usuario voy a colorar una ruta que me lleve a la confimacion:
+    u: bienesraices_mvc/routes/usuarioRoutes.js
+
+    s: 	➡️
+      import {confirmar,... //importo la funcion contorladora
+      ...
+
+      router.get('/confirmar/:token', confirmar);
+
+      ⬅️
+
+  23.8) 	ahora en "23.4) creo en los helpers el email" debo modificar el href
+
+    n: modificar el email.js
+    u: /bienesraices_mvc/helpers/email.js
+
+    s:
+      <p>Tu cuenta ya esta lista , da click en el siguiente enlace
+      <a href="${process.env.BACKEND_URL}:${process.env.PORT ?? 3300}/auth/confirmar/$
+              {token}">Confirmacion de cuenta </a>
+      </p>
+    23.81) debe colocar en el .env
+    s:
+      BACKEND_URL=http://localhost
+
+
+    n: ahora puede llenar formulario revisar el email y abrir el link y ya debe tener el token ese link
+    n: como en el  punto 23.6 hay un console.log('confirmando...', token); y no un return se queda dando vuelticas
+    entonces esa funcion queda:
+    u:	bienesraices_mvc/controllers/usuarioController.js
+    n: se agrega el next
+    s:
+      const confirmar = (req, res, next()) => {
+        const { token } = req.params;        // esto lo que hace es recibir un params desde 23.7)
+        console.log('confirmando...', token);
+        next()
+      };
+
+  //------confirmacion de token no valido
+
+  23.9) en la funcion de confirmar del punto 23.6)
+    u:/bienesraices_mvc/controllers/usuarioController.js
+    n: en la funcion de confirmar se recibe el token por lo tanto se debe de  verificar que exista en la DB
+
+    n: en la funcion de confirmar,configurar la parte que permite renderisar la pagina de error
+
+    s:
+      const confirmar = async (req, res, next) => {
+        const { token } = req.params;
+
+        //-----verificar si token es valido
+        const usuario = await Usuario.findOne({ where: { token } });
+        if (!usuario) {
+          return res.render('auth/confirmar-cuenta', {
+            pagina: 'Error al confirmar cuenta',
+            mensaje: 'Hubo un error al confirmar cuenta,token no valido',
+            error: true,
+          });
+        }
+        //-----confirmar la cuenta
+
+        next();
+      };
+
+  23.91) debe de crear la pagina para el error de confirmacion de cuenta, osea si al
+    dar click en e link del mensaje y el token es invalido :
+
+    u: ienesraices_mvc/views/auth/confirmar-cuenta.pug
+
+    s:
+      extends ../layout/index
+
+
+      block contenido
+        div.py-10
+          h1.text-3xl.my-15.text-center.font-extrabold Bienes
+            sapan.font-normal Raices
+          h2.text-center.text-2xl.font-extrabold #{pagina}
+
+          div(class="bg-white shadow py-8 px-4 rounded-lg max-w-md mx-auto")
+
+            p(class=error?'bg-red-500':'bg-green-500').py-2.px-5.rounded-lg.w-full.font-bold.
+            text-center.text-white.uppercase= mensaje
+
+            if !error  		//para ponerle que si no hay error un link para loguearse al inicio
+        a(href="/auth/login " class="text-center font-bold text-sm text-slate-600
+        uppercase mt-10 block") !ya puedes iniciar seccion!
+
+
+
+    n: ojo hay formas de escribir class , para los estilos styles
+    s:
+      forma1 de escribir condicional en html:
+        p(class=`${error?'bg-red-500':'bg-green-500'}`)
+
+      forma2 de escribir condicional en html:
+        p(class=error?'bg-red-500':'bg-green-500')
+
+  ----confirmar cuenta
+  23.92) despues de que se abre el link desde e correo y si tiene un token que si es correcto
+    n: si el token es okey, debo de poner ese campo de "token " en "null"
+    y colocar el campo o columna de "confirmado" en true
+
+    u: bienesraices_mvc/controllers/usuarioController.js
+    s:
+      //funcion que comprueba cuenta
+      const confirmar = async (req, res, next) => {
+        const { token } = req.params;
+
+        ...
+      //-----confirmar la cuenta
+        usuario.token = null;
+        usuario.confirmado = true;
+        await usuario.save();
+        return res.render('auth/confirmar-cuenta', {
+          pagina: 'No hay Error al confirmar cuenta',
+          mensaje: 'Inicia seccion se ha confirmado token',
+          error: false,
+        });
+
+      };
+
+    n: entocneces en el .pug del 23.91
+    s:
+      ...
+      if !error  		//para ponerle que si no hay error un link para loguearse al inicio
+        a(href="/auth/login " class="text-center font-bold text-sm text-slate-600
+        uppercase mt-10 block") !ya puedes iniciar seccion!
+
+
+---------------evitando cross and request----------------------Backend🤖️🤖️🤖️🤖️🤖️🤖️🤖️🤖️🤖️🤖️🤖️🤖️🤖️🤖️
+24)validacion seguridad con CSRF:  https://www.npmjs.com/package/csurf
+
+	n: para verificar que lo que viene del reques viene de esa URL y que eso no se envia desde una terminal
+	n: instalacion, ojo existe un Cross-site request forgery para node (CSRF) pero para express (CSURF)
+	 ya que tiene todos los metodos para funcionar con express
+
+	c:
+		npm install csurf cookie-parser
+
+24.1) importo y creo las funcionalidades.
+	u:
+		/bienesraices_mvc/index.js
+
+	s:
+		import csurf from 'csurf';
+		import cookieParser from 'cookie-parser';
+
+		//habilitar las cookie parser---
+		app.use(cookieParser());
+		//habilitar el CSRF-------------
+		app.use(csurf({ cookie: true })); //como confifguracion se le pasa cookie,
+						  //porque se puede por secciones tambien
+
+24.2)  ahora debo de colocar en el controlador "formulario e registro", ya que necesit que el controlador mande ese token
+	csrf, una vez se halla colocado ese middleware, cuando haga un click al boton "register" o algun formulario, no va  a dejar
+	que se proceda con ninguna funcion, entonces toca que ponerle ese token en el formulario de registro. 
+  lo que permitira pasarle ese token a la pagina que quiero renderizar y asi podra renderizar
+
+	u: bienesraices_mvc/controllers/usuarioController.js
+
+	s:
+		const formularioRegistro = (req, res) => {
+
+		  res.render('auth/registro', {
+		    pagina: 'crear cuenta',
+		    csrfToken: req.csrfToken(), 	//----------------le paso el token que ya es una funcion
+		    					//----------------propia del middelware de "csrf" en index.js
+		    					//----------------en el punto 24.1)
+		  });
+		};
+
+24.21) sin emabrgo como al registrar se genera unas funciones que permiten:
+	//__________comprobando si el formlario es vacio
+	//__________comprobando si el usuario esta reistrado
+
+	 y estas USAN EL el formulario de registro pues se debe mandar tambien el token
+
+	s:
+		//__________comprobando si el formlario es vacio
+			  if (!resultado.isEmpty()) {
+			    return res.render('auth/registro', {
+			      ..
+			      .
+			      csrfToken: req.csrfToken(),//----------------le paso el token
+			    });
+			  }
+
+			 ....
+		 //__________comprobando si el usuario esta registrado
+			  if (existeUsuario) {
+			    return res.render('auth/registro', {
+			     ....
+			      csrfToken: req.csrfToken(),//----------------le paso el token
+			     ....
+			    });
+			  }
+
+24.2) ahora me voy a la vista y le paso al formulario ese token para que sepa que se encunetra en esa pagina:
+
+	u:
+		 /bienesraices_mvc/views/auth/registro.pug
+	s:
+		form.space-y-2(method="POST" action="/auth/registro")
+
+		  input(type="hidden" name="_csrf" value= csrfToken)
+
+		  div ....
+		  ...
+
+----------RESETEO PASSWORD----------------------Backend🤖️🤖️🤖️🤖️🤖️🤖️🤖️🤖️🤖️🤖️🤖️🤖️🤖️🤖️
+25) reseteo de password
+
+    n: para reseteo debo entonces tener en cuenta la url que me direcciona  a olvido de contraseña:
+    u:
+      bienesraices_mvc/routes/usuarioRoutes.js
+
+    s:
+      router.get('/olvide-password', formularioOlvidePassword);
+
+
+    n: por lo tanto debo tener esa funcion y que ella me renderice algo:
+    s:
+      const formularioOlvidePassword = (req, res) => {
+        res.render('auth/olvide-password', {
+          pagina: 'Recuperacion de acceso a bienes raices',
+          csrfToken: req.csrfToken(),
+        });
+      };
+
+
+  25.1)	entonces creo la vista para enviar a un correo la solicitud de cambio de contraseña:
+
+    U: /bienesraices_mvc/views/auth/olvide-password.pug
+
+    s:
+      form.space-y-5(method="POST" action="/auth/olvide-password" noValidate)
+
+        input(type="hidden" name="_csrf" value= csrfToken)
+        div
+          label.block.text-md.uppercase.text-gray-500.mb-3.py-3.font-bold(for="email") Tu email
+          input#email.w-full.px-3.py-3.border.border-gray-300
+          .rounded-xl.placeholder-green-400(placeholder="Tu email" type="email" name="email")
+
+
+    n: como se ve se rea un formuladio y el metodo post va direccionar a la ruta
+      /auth/olvide-password
+
+      ruta :
+          router.post('/olvide-password', resetPassword);
+
+      tambien se le pasa lo del CSRF
+
+  25.2) entonces en la funcion resetPassword:
+    u: bienesraices_mvc/controllers/usuarioController.js
+    n: esta funcion verifica el formulario que cumpla que sea (email )
+    n: verifica que //__________comprobando si el formlario es vacio
+    n: //__________Obtiene un request.body y busca si el usuario existe
+    n: //__________comprobando si el usuario esta registrado
+    n: //___________Generar un token y enviar email con ese token 
+    (se hace en la funcion emailOlvidePassword() ): que tiene un link a la ruta:
+                  router.get('/olvide-password/:token', comprobarToken);
+    n: //Renserizar mensaje: renderiza ese mensaje de que ya senvio correo para que vuelva a
+        ontroducir	 otra clave
+
+    s:
+      const resetPassword = async (req, res) => {
+      ....
+      }
+
+
+  25.3) entonces crea la funcion que permite enviar el email para resptablecer contraseñ:
+    u: /bienesraices_mvc/helpers/email.js
+    s:
+      const emailOlvidePassword = async (datos) => {
+        ....conexion email
+
+        const { nombre, email, token } = datos;
+        //enviar email
+
+        // send mail with defined transport object
+        let info = await transport.sendMail({
+          ....
+
+          html: `<div>
+            .....
+            <a href="
+            ${process.env.BACKEND_URL}:${process.env.PORT || 3300}/auth/olvide-password/ //ojo aqui va la ruta al contorlador de olvide password
+            ${token}">Reestablecer password
+                  </a>
+
+          ...
+          </div > `, // html body
+          .....
+
+        });
+      };
+      export { emailRegistro, emailOlvidePassword };
+
+    n: como el correo tiene el link con la ruta para hacer un get a la ruta :
+    U:
+      /bienesraices_mvc/routes/usuarioRoutes.js
+    s:
+      router.get('/olvide-password/:token', comprobarToken);
+      router.post('/olvide-password/:token', nuevoPassword);
+
+    n: ahora en el controlador se llama el helper de "emailOlvidePassword" con el fin de que se pueda mandar el eemail
+    de que se le olvido la password
+
+    u:
+      bienesraices_mvc/controllers/usuarioController.js
+    s:
+      emailOlvidePassword({
+          email: usuario.email,
+          nombre: usuario.nombre,
+          token: usuario.token,
+        });
+
+    n: luego se renderiza la vista que permite mostrar el mensaje de que se envio el mensaje para cambio de contraseña
+
+    u:
+      /controllers/usuarioController.js
+    s:
+      //Renserizar mensaje
+
+        //------------Mostrar mensaje de confirmacion
+        res.render('templates/mensaje', {
+          pagina: 'CEnvio de reestablecimiento de contraseña',
+          mensaje: 'hemos enviado un Email de restablecimiento de contraseña',
+        });
+
+    n: Entonces hasta aqui se envia el email con el token  helper:"emailOlvidePassword "
+    ahora con el link mandado en el mensaje se debe hace el "comprobarToken" y luego el "nuevoPassword"
+
+    n: entonces se llama a la funcion "comprobarToken" entonces se debe crear en el usuarioController
+
+  25.4) creando "comprobarToken": despues de dar click en el link del correo
+
+    s:
+      const comprobarToken = async (req, res, next) => {
+        const { token } = req.params;
+        const usuario = await Usuario.findOne({ where: { token } });
+
+        //-----verificar si token es valido o usuario regitrado
+
+        if (!usuario) {
+          return res.render('auth/confirmar-cuenta', {
+            pagina: 'Reestablece tu pasword',
+            mensaje: 'Hubo un error al validar informacion,token no valido, intenta de nuevo',
+            error: true,
+          });
+        }
+        //-----mostrar formulario para modificar password
+        res.render('auth/reset-password', {
+          pagina: 'Reestablece tu pasword',
+          csrfToken: req.csrfToken(),
+        });
+
+
+
+        next();
+      };
+
+    n: la vista "confirmar-cuenta " la reutilizamos de arrriba 23.9) y la vista "reset-password" la creamos
+    debe tener campo de "password nueva "
+    u:	/bienesraices_mvc/views/auth/reset-password.pug
+    s:
+
+      extends ../layout/index
+      block contenido
+        div
+          h1.text-3xl.my-15.text-center.font-extrabold Bienes
+            sapan.font-normal Raices
+          h2.text-center.text-2xl.font-extrabold #{pagina}
+          //h2.text-center.text-2xl.font-extrabold=pagina
+
+          if (errores)
+            div(class="mx-auto max-w-md my-10")
+        each error in errores
+        p.bg-red-600.text-white.uppercase.text-xs.text-center.p-2.mb-1.font-bold= error.msg
+
+          .mt-3.mx-auto.max-w-md
+            .bg-green.py-3.px-4.shadow
+          // forma1 pero como va a hacer un post al mismo url se puede quitar el action
+          //form.space-y-5(method="POST" action=`/auth/olvide-password/${token}` noValidate) //oooojo quito el action
+          form.space-y-5(method="POST" noValidate)
+
+    n: yo voy  a hacer un post hacia la RUTA	"auth/olvide-password" y como hasta aqui se hace el render a LA VISTA
+    "auth/reset-password" esto se hace en (//-----mostrar formulario para modificar password") entonces se puede quitar
+    el action ya que si se hace sin el action ("post" ) entocnes automaticamente esta llamando la RUTA
+    router.post('auth/olvide-password) ya que es la ruta O URL A LA QUE SE ESTA VISITANDO,es decir si se quita el action se manda a la misma ruta que se esta visitanto es seria la RUTA (auth/olvide-password) Y
+    COMO LA RUTA ES ASI :router.post('/olvide-password/:token', nuevoPassword);
+    entonces se llama a "nuevoPassword
+
+    n: importante si yo en el paso 25.5 de crear formulario uso formulario de la forma 1)
+      debo de colocar en la linea  //------mostrar formulario para modificar el el "token"
+
+      s:
+
+        //-----mostrar formulario para modificar password
+          res.render('auth/reset-password', {
+            pagina: 'Reestablece tu pasword',
+            csrfToken: req.csrfToken(),
+            token: token,
+          });
+
+
+    n: entonces como se debe crear una vista para restablecer contraseeña
+    //-----mostrar formulario para modificar password" entonces se debe crear la vista
+    "auth/reset-password"
+
+
+  25.5)formulario para poner la nueva contraseña:
+    u: bienesraices_mvc/views/auth/reset-password.pug
+
+    s:
+      // forma1 pero como va a hacer un post al mismo url se puede quitar el action
+      1) // forma1 pero como va a hacer un post al mismo url se puede quitar el action
+
+              form.space-y-5(method="POST" action=`/auth/olvide-password/${token}` noValidate)
+
+      2) form.space-y-5(method="POST" noValidate)
+
+        input(type="hidden" name="_csrf" value= csrfToken)
+        div
+
+          label.block.text-sm.uppercase.text-gray-500.mb-3.py-3
+          .font-bold(for="password") Tu contraseña
+
+          input#password.w-full.px-3.py-3.border.border-gray-300
+          .rounded-xl.placeholder-green-400(placeholder="Tu password"
+          type="password" name="password")
+
+        div
+
+    n: entonces como al dar click va a generarse un post a la ruta:
+    ruta:
+      router.post('/olvide-password/:token', nuevoPassword);
+
+    n: esa tura tiene la funcion: "nuevoPassword"
+    n: tengo que modificar a hora si ese password en esa funcion
+
+  25.6) modificando en esa funcion "nuevoPassword"
+    u: bienesraices_mvc/controllers/usuarioController.js
+
+    n: lo que se debe hacer aqui es:
+      //validar password
+      //validar quien hace el cambio
+      //hashear el nuevo password
+
+    s:
+      import bcrypt from 'bcrypt';
+
+      const nuevoPassword = async (req, res) => {
+
+        //_________validar password
+        await check('password').isLength({ min: 6 }).withMessage('password corta ').run(req);
+        await check('repetir_password').equals(req.body.password)
+        .withMessage('password diferente?').run(req);
+
+        let resultado = validationResult(req);
+        //__________comprobando si el formlario es vacio
+        if (!resultado.isEmpty()) {
+          return res.render('auth/reset-password', {
+            pagina: 'Reestablece tu pasword',
+            csrfToken: req.csrfToken(),
+            errores: resultado.array(),
+          });
+        }
+
+        //__________validar quien hace el cambio
+        //__________puedo leer el token y mirar en la base de datos quien
+            es el usuario a cambiar la contraseña
+
+        const { token } = req.params;
+        const { password } = req.body;
+        const usuario = await Usuario.findOne({ where: { token } });
+
+        //__________hashear el nuevo password
+
+        const salt = await bcrypt.genSalt(10);
+        usuario.password = await bcrypt.hash(password, salt);
+
+        usuario.token = null;
+
+        await usuario.save();
+
+        return res.render('auth/confirmar-cuenta', {
+          pagina: 'Password restablecido!',
+          mensaje: ' el password se corrigio correctamente ',
+        });
+
+
+      };
+
+--------------Backend🤖️🤖️🤖️🤖️🤖️🤖️🤖️🤖️🤖️🤖️🤖️🤖️🤖️🤖️
+26) authenticar el login ,validacion campos login
+	N. aqui se realiza similar a lo anterior :
+	u: bienesraices_mvc/routes/usuarioRoutes.js
+
+	n: metodo post para login
+	s:
+		router.post('/login', autenticar);
+  26.0.1) ojo como se creo formularioLogin en el punto 11) ahora se debe mandar el csrftoken para que pueda
+    ahora si hacer el post del login:
+
+    u: bienesraices_mvc/controllers/usuarioController.js
+    s:
+      const formularioLogin = (req, res) => {
+
+        res.render('auth/login', {
+          pagina: 'inicion Sesión',
+          csrfToken: req.csrfToken(),
+          barra: false,
+        });
+      };
+
+  26.1) funcion autenticar en el controlador:
+    u: /bienesraices_mvc/controllers/usuarioController.js
+    s:
+      const autenticar = async (req, res) => {
+        //_____validando campos
+        await check('email').isEmail().withMessage('Debe colocar un email valido ').run(req);
+        await check('password').notEmpty().withMessage('password Obligatorio ').run(req);
+
+        let resultado = validationResult(req);
+        //__________comprobando si el formulario es vacio
+        if (!resultado.isEmpty()) {
+          return res.render('auth/login', {
+            pagina: 'inicion Sesión',
+            errores: resultado.array(),
+            csrfToken: req.csrfToken(),
+          });
+        }
+      };
+  26.2) avista login:
+    u: bienesraices_mvc/views/auth/login.pug
+
+
+
+  26.2.1) agregar en el formulario:
+    n: se debe agregar en el formulario el post y la ruta del post
+      ademas del validador de token de acceso a ruta. y tambien
+      el mensaje si hay algun error
+
+
+
+    s:
+
+          if (errores)
+            div(class="mx-auto max-w-md my-10")
+            each error in errores
+        p.bg-red-600.text-white.uppercase.text-xs.text-center.p-2.mb-1.font-bold= error.msg
+
+      form(method="POST" action="/auth/login").space-y-2
+            input(type="hidden" name="_csrf" value= csrfToken)
+
+
+27) validacion si el usuario existe y contraseña correcta (methodo personalisado en modelo)
+	u: bienesraices_mvc/controllers/usuarioController.js
+	n: primero busco por el req, si el usuario su email existe
+	n: primero busco por el req, si el usaurio esta confirmado (usuairo.confirmado==true)
+
+  27.0)
+    u: /bienesraices_mvc/controllers/usuarioController.js
+    s:
+    const autenticar = async (req, res) => {
+
+      //_____validando campos
+      //__________comprobando si el formlario es vacio
+      ..
+      ..
+      ..
+
+      const { email, password } = req.body;
+        //_________validando si ususario existe y si esta confirmado:
+        const usuario = await Usuario.findOne({ where: { email } });
+        if (!usuario) {
+          return res.render('auth/login', {
+            pagina: 'inicion Sesión',
+            errores: [{ msg: 'el ususario no existe' }],
+            csrfToken: req.csrfToken(),
+          });
+        }
+        //_________usuario confirmado:
+
+        if (!usuario.confirmado) {
+          return res.render('auth/login', {
+            pagina: 'inicion Sesión',
+            errores: [{ msg: 'el ususario no esta confirmado' }],
+            csrfToken: req.csrfToken(),
+          });
+        }
+
+      //______revisar el password
+
+
+      //---ojo esto se hace con el metodo personalizado en sequalize 27.1)	-------//
+
+        if (!usuario.verificarPassword(password)) {
+          return res.render('auth/login', {
+            pagina: 'inicion Sesión',
+            errores: [{ msg: 'la contraseña esta incorrecta' }],
+            csrfToken: req.csrfToken(),
+          });
+        }
+
+
+    }
+
+
+  27.1) validando si coinciden la password, a traves de un metodo personalizado en el MODELO
+    u: /bienesraices_mvc/models/Usuario.js
+    s:
+      ...
+      //Metodos Personalizados "Usuario.prototype.verificarPassword"
+
+      Usuario.prototype.verificarPassword = function (password) {
+        //___password digitada en controlador,password
+        //o instancia de la base de datos
+
+        return bcrypt.compareSync(password, this.password);
+      };
+
+    n: this.password es la instancia de la base de datos, osea la password que tenga ese usuario
+
+
+  27.2) haciendo el llamado en el controlador
+    u: bienesraices_mvc/controllers/usuarioController.js
+    n: como ya tengo una instancia de "Usuario" ya puedo hacer uso de ese prototype
+    s:
+      //______revisar el password
+
+        if (!usuario.verificarPassword(password)) {
+          return res.render('auth/login', {
+            pagina: 'inicion Sesión',
+            errores: [{ msg: 'la contraseña esta remal' }],
+            csrfToken: req.csrfToken(),
+          });
+        }
+
+-----------------JWT----------------
+28) autenticacion con JWT y almacenamiento en cookie ( tambien pudiera ser en un localstorage)
+
+	instalacion:
+	c:
+		npm install jsonwebtoken
+
+  28.1) en el controlador por ahora para aprender se puede hacer desde el mismo controlador
+
+    n: primero importo el jwt:
+    U: controllers/usuarioController.js
+    s:
+      import jwt from 'jsonwebtoken';
+
+      ...
+      const autenticar = async (req, res) => {
+
+        ......
+        //______Autenticar el usuario
+
+        const token = jwt.sign(
+              {
+                nombre: 'juan',
+                empresa: 'tecnologia',
+                tecnologias: 'node.js',
+              },
+              'palabrasupersecreta',
+              {
+                expiresIn: '1d',
+              }
+            );
+          console.log('token___________', token);
+
+
+      }
+
+
+
+  28.2) creando una funcion en el helper
+    n: creo la palabra secreta en el .env:
+    s: JWT_SECRET=palabrasecretajwt
+    n: luego en el helper:
+    U:/bienesraices_mvc/helpers/token.js
+    s:
+      import jwt from 'jsonwebtoken';
+
+      const generarJWT = (datos) => {
+        return jwt.sign({ id: datos.id, nombre: datos.nombre },
+        process.env.JWT_SECRET, { expiresIn: '1d' });
+      };
+
+      export { generarJWT,...};
+
+  28.3) 	ahora si en el controlador lo llamo si:
+    U: controllers/usuarioController.js
+    s:
+      import { generarJWT } from '../helpers/token.js';
+
+      //______Autenticar el usuario
+        const token = generarJWT(id: usuario.id, nombre: usuario.nombre);
+
+
+  28.4)almacenamiento en cookie de ese token:
+    n: en el punto 24) se agregaron las cookie ahora si vamos a usarla bien
+    (cookie-parser)
+
+    u: /controllers/usuarioController.js
+    s:
+      //______Almacenar Cookie
+        return res
+          .cookie('_token', token, {
+            httpOnly: true, //para que el cookie  no sea accesible desde la api de javascript
+          // secure: true, //si es https, se habilita si se tiene un devploy y certificado ssl
+            sameSite: true,
+          })
+          .redirect('/mis-propiedades');
+
+
+---------middleware que permite acceder a ciertas paginas si esta el token
+29) creando el elemento de propiedades y unicamente el boton de publicar propiedades, ademas el header:
+	n:creo los archivos:
+	u1: bienesraices_mvc/controllers/propiedadController.js
+	s:
+		const admin = (rew, res) => {
+		  res.render('propiedades/admin', {
+		    pagina: 'mis propiedades',
+		    barra: true,
+		  });
+		};
+		//fiormlario para crear propiedad
+		const crear = (rew, res) => {
+		  res.render('propiedades/crear', {
+		    pagina: 'Crear propiedad',
+		    barra: true,
+		  });
+		};
+		export { admin, crear };
+
+
+29.0.1)
+	n: se crea la carpeta para propedades y su vista tambien
+	u3: bienesraices_mvc/views/propiedades/admin.pug
+
+	n quiero mostrar la vista para que vean el code para darle direccionamiento a los botones:
+	s:
+		extends ../layout/index
+
+
+		block contenido
+		  div
+		    h1.text-3xl.my-15.text-center.font-extrabold Bienes
+		      sapan.font-normal Raices
+		    h2.text-center.text-2xl.font-extrabold #{pagina}
+
+		    a(href="/propiedades/crear" class="rounded px-10 py-2   //para crear las propiedades
+		    bg-indigo-600 hover:bg-indigo-700 text-sm font-bold
+		    text-center text-white uppercase my-5
+		    inline-block w-full sm:w-auto") Publicar Propiedad
+
+
+
+
+	u2: bienesraices_mvc/routes/propiedadesRoutes.js
+	s:
+		import express from 'express';
+		import { admin, crear } from '../controllers/propiedadController.js';
+		const router = express.Router();
+
+		router.get('/mis-propiedades', admin);
+		router.get('/propiedades/crear', crear);
+
+		export default router;
+
+29.0.3) en el index coloco la ruta a esas rutas jejej
+	u:index.js
+	s:
+		//routing-----------------------------
+		app.use('/auth', usuarioRoutes);
+		app.use('/', propiedadesRoutes);
+
+
+
+29.1) se va modificar un header con lo cual se crea :
+	u:/bienesraices_mvc/views/layout/header.pug
+	s:
+		 header.bg-indigo-600.p-4
+		  .container.mx-auto.flex.justify-between.items-center
+		    h1.text-2xl.text-white.font-extrabold.text-center Bienes
+		      span.font-normal Raices
+
+		    nav(class="my-5 text-sm  md:flex md:items-center md:gap-3 font-bold
+		    text-white sm:hidden")
+
+		      a(href="") Mis propiedades
+		      a(href="") Mi perfil
+		      a(class="bg-indigo-800 py-2 px-10 rounded-lg" href="") Cerrar sesión
+
+29.2) se incluye dentro el index principal:
+	n: el header se debe dejar en un elemento aparte y llamarse desde el index principal,
+	  sin embargo debe tener la opcion de poder ocultarse si se desea en alguna vista diferente
+	  se oculte asi por ejemplo la vista admin si uno desea que la tenga, el controlador debe
+	   mandar la opcion de "true " en su obejeto depropiedades para que el index reciba la opcion y con un
+	   condicional lo deje o no mostrar dicho header
+
+	u:	/bienesraices_mvc/views/layout/index.pug
+	s: 	.
+		.
+		...
+
+		body.min-h-screen.bg-gray-50
+		    if barra
+		     include header  //aquie se incluye el header
+
+	n: como se puede ver se le pasa un "if barra"	 que hace que se muestre la barra
+		unicamente si se ha colocado "barra:true" entonces en cada controlador que
+		se encarga de renderizar la vista lo que se hace es que se pasa una propiedad de esa manera
+
+29.3)	NOTISIMA: uno puede pasar esas propiedades hasta el index principal, es decir las
+	propiedades que uno manda en el {objeto:"dato mandado desde controlador"} lo que se pasa en las
+	propiedades puede ser vista desde el html padre osea el index principal (vista principal):
+
+	u:  bienesraices_mvc/controllers/propiedadController.js
+
+	s:
+		const admin = (rew, res) => {
+		  res.render('propiedades/admin', {
+		    pagina: 'mis propiedades',
+		    barra: true, //$$$$$$$$$$$$$esto por ejemplo se le puede pasar a la vista admin y al index
+		  });
+		  res.send('Mis propiedades');
+		};
+		export { admin };
+
+	n: entonces en el index como se dice en la linea de (29.2)
+
+29.4) creo la "ruta":
+	u:
+		routes/propiedadesRoutes.js
+
+	s:	.
+		import { admin, crear } from '../controllers/propiedadController.js';
+		.
+		router.get('/propiedades/crear', crear);
+
+
+
+
+29.4.1) creo el formulario de crear propiedades "controller":
+	u:	controllers/propiedadController.js
+	s:
+		//fiormlario para crear propiedad
+		const crear = (rew, res) => {
+		  res.render('propiedades/crear', {
+		    pagina: 'Crear propiedad',
+		    barra: true,
+		  });
+		};
+		export { admin, crear };
+
+29.4.2) creo la "vista":
+	u:
+		views/propiedades/crear.pug
+	s:
+
+		extends ../layout/index
+
+
+		block contenido
+		  div
+		    h1.text-4xl.my-10.text-center.font-extrabold Bienes
+		      sapan.font-normal Raices
+		    h2.text-center.text-2xl.font-extrabold #{pagina}
+
+		    div(class="bg-white shadow  py-8 px-4 rounded mx-auto my-10 max-w-4xl md:px-10 ")
+		     form.space-y-2(action="")
+		      div.space-y-8
+			 h3.text-lg.
+		      h1 contenido
+		      h1 contenido
+
+
+30) crear compilacion de archivos js
+  n: debo agregar el script:
+  u: views/layout/index.pug
+  s:
+   body.min-h-screen.bg-gray-50
+    ..
+    .
+    block scripts //agregado
+
+  30.1) 
+  u: views/propiedades/crear.pug
+  s:
+    ....
+    block scripts
+        script(src="https://unpkg.com/leaflet@1.8.0/dist/leaflet.js")
+        script(src="https://unpkg.com/esri-leaflet@3.0.8/dist/esri-leaflet.js")
+        script(src="https://unpkg.com/esri-leaflet-geocoder@2.2.13/dist/esri-leaflet-geocoder.js")
+        script(src="https://cdnjs.cloudflare.com/ajax/libs/leaflet-geosearch/2.7.0/bundle.min.js")
+  30.2) intalar web pack para compilar archivos js
+    c:  npm i -D webpack webpack-cli
+
+    n : requiere un archivo de configuracion como tailwind y postcss
+
+    n: creo el archivo:
+    u: webpack.config.js
+    s:
+      export default {
+        mode: 'development',
+        entry: { //estas son las entradas
+         mapa: './src/js/mapa.js'
+         otros_ejemplo: './src/js/mapa.js'
+          
+        },
+        output: {  ///estas son las salidas donde quiero que se almacene despues de haberlo compilado 
+          filename: '[name].js',   //toma el nombre de "mapa" o "otros_ejemplo" y le da el nombre 
+          path: path.resolve('public/js')  //lo resuelve o lo guarda en public
+
+        }
+      }
+
+  30.3) creo unas carpetas: y el archivo 
+    u: src/js/mapa.js
+    s:
+      alert('soy un mapa')
+
+  31.4) voy a packega json y coloco el ejecutabel de webpack
+    s:  "scripts": {
+    .....
+      "js": "webpack --watch" //agregado el watch sirve pa que cada vez que se haya un cambio se re lanse este codigo
+    },
+
+
+    n: ahora puedo ejecutar:
+    c: npm run js
+
+    u: views/propiedades/crear.pug
+    s:
+    block scripts
+    ......
+      script(src="/js/mapa.js")
+
+    n: recargo la pagina y se debe mostrar el mensaje del mapa.js
+
+31) Ejecucion de multiples scrips al mismo tiempo (como npm run serverkenneth y css y js al mismo tiempo)
+    c: npm i -D concurrently
+    U: package.json
+    s:
+          "dev": "concurrently \"npm run css\" \"npm run js\"  "
+
+32) continuo con el mapa: 
+    n: primero agrego los stylos al index principal:
+    u:views/layout/index.pug
+    s: 
+       block styles
+
+  32.1) voy ala pagina de git y copio
+      gist: https://gist.github.com/codigoconjuan/43252f6d5d80dbc0b5f8390086a54ac8
+
+  u: views/propiedades/crear.pug
+  s: ...
+      block styles
+      link(rel="stylesheet" href="https://unpkg.com/leaflet@1.8.0/dist/leaflet.css")
+
+  32.2)
+  u: src/js/mapa.js
+  s: del mapa.js que esta en la pagina
+
+   32.2.1) en:
+   u: views/propiedades/crear.pug
+   n: agrego el mapa
+   s:
+      #mapa.w-xl.h-96
+
+  32.3) para agregar el pin 
+  u: src/js/mapa.js
+  s:
+      ...
+      ..
+      // para pin 
+      let marker;
+      ...
+      ..
+      //parapin:
+        marker = new L.marker([lat, lng], //deja centrado esa lat y long
+          {
+            draggable: true, //Sirve para mover el pin
+            autoPan: true    // sirve para poder mover el pin y que se centre el mapa en donde pongo el pin 
+          }
+        ).addTo(mapa)
+
+  32.4) obtener latitud y longitud del pin
+      n: dependiendo donde se ubique el pin de ahi va a tomar esa posicion 
+      u:src/js/mapa.js
+      s: 
+      //Detectar el movimiento del pin
+        marker.on('moveend', function (e) {
+          marker = e.target; // esto seria un objeto de tipo marker y tiene un proto
+          const posicion = marker.getLatLng();
+          console.log(posicion);
+
+          mapa.panTo(new L.LatLng(posicion.lat, posicion.lng)); //toma el mapa que esta y lo reposiciona
+          //con esas cordenadas y lo centra
+        });
+
+  32.5) obtener informacion de la calle al soltar el pin
+
+    u:src/js/mapa.js
+    s:
+      // Utilizar provider y geocoder 
+        const geocoderService = L.esri.Geocoding.geocodeService(); //esto permite obtener el nombre de la calle
+
+        marker.on('moveend', function (e) {
+          ...
+          ..
+          //Obtener la informacion de las calles al soltar el pin (13 es el Zoom) : 
+          //geocoderservice necesita una lat y long para dar referencia de calles y otra informacion adicional 
+          geocoderService.reverse().latlng(posicion, 13).run(function (error, resultado) {
+            console.log(resultado)
+          })
+
+        });
+
+
+
+
+
+
+
+
+
+
+====================================================================================================
+====================================================================================================
+====================================================================================================
+====================================================================================================
+====================================================================================================
+
+info general) estilos co pug:
+	*
+	n:
+		*) los display in line es decir las etiquetas como <a> no pueden ser afectados
+			ni por un width ni por un margin por lo tanto se podria hacerlo un "block"
+			co lo que se le coloca "block"
+
+			s:  a(href="/propiedades/crear" class="my-5 block ")
+
+		n: sin emabrgo va asuceder que el bloque cubre toda la pantalla por eso se le coloca:
+			s:  a(href="/propiedades/crear" class="my-5 inline-block w-full sm:w-auto")
+
+	s:
+		*) h1.text-4xl	: tamaño letras
+
+		*) .text-center	: centra texto
+
+		*) .font-extrabold	: tipo de letra "extrabold"
+
+		*) .font-normal	:  tipo de letra "normal"
+
+		*) .mt-8	: margin top 8
+		*) .mb-12	: margin box 12
+		*) mx-auto : margin x automatico
+		*) mx-auto.max-w-md	: maxima width
+
+		|  ____
+		| |padin x=4
+		| |_____
+		|_________
+		 	marginy=4
+		 ________
+		|  ____
+		| |padin x=4
+		| |_____
+		|___________
+			^
+			marginy=10
+			v
+		  ___________
+		|  ____
+		| |padin x=4
+		| |_____
+		|
+
+		*) max-w-4xl: max width
+		 ______________
+		|  __________  |
+		| |padin x=4 | |
+		| |	     | |
+		| |__________| |
+		|<-max width-->|
+		|______________|
+		 _______________________
+		|  __________    	|
+		| |padin x=4 |   	|
+		| |	     |   	|
+		| |__________|   	|
+		|<-max width8---------->|
+		|_______________________|
+
+
+		*) .bg-white	: background white
+
+		*) .py-8.px-4	: pading y 8 y x 4
+
+		|     ____
+		|<-->|padin x=4
+		|    |_____
+		|
+
+		|         ____
+		|<------>|padin x=10
+		|        |_____
+		|
+
+		*)  md:px-10 : significa que en tamños "md" voy a ejecutar unpadding de 10
+		*) .shadow	: sombra
+
+		*) text-sm	: tamaño de texto
+
+		*) .uppercase	: letra mayuscula
+
+		*) .text-gray-500	: color de texto y la intensidad
+
+		*) inline-block : el inlinde block sirve para poner un bloquecito como <a>
+				en formato block pero que pueda ponersele un with o recubrimiento
+				que no se de en toda la pantalla sino segun se coloque "w-full sm:w-auto"
+		*)  sm:w-auto: esto le dice que tome el ancho en la pantalla maximo
+				solo si tiene una reduccion a "sm", de resto tomara
+				solo el tamaño menos posible que cubra lo que esta dentro de
+				ese bloquecito
+
+
+		*) w-full	: el bloque tiene un width:100%
+				  osea se cubre toda la linea de divicion (12)
+
+		*) border.border-blue-300	: borde ademas con color azul
+
+		*) rounded-xl	: redondeo de borde tamaño xl
+
+		*) placeholder-green-400(placeholder="Tu nombre"): color verde el
+		  	  				           placeholder
+		*) space-y-5	: si tengo ejemplo div y dentro tengo 3 div anidados
+				  entonces la separacion entre cada div anidado es 5
+				  ose alos elementos hijos se separan
+
+                *) bg-indigo-600	: color de fondo azul intensidad 600
+                			  indigo es el color
+
+                *) hover:bg-fuchsia-700	: cambia al posicionarse en el boton , cambia
+                 			a este color fucsia, OJO debe ir con "class":
+                 ejm:
+                 	input(class="bg-indigo-600 hover:bg-fuchsia-700"
+                 	type="submit"value="c" )
+
+                *) n: ojo esto tiene que ir en class
+                	s:
+                	 bg-indigo-600 hover:bg-indigo-700
+
+                *) cursor-pointer	: ayuda a que cuando me posicione
+                                         sobre el blocke marque con una manito
+
+		*) flex.items-center.justify-between: es un display flexbox
+				  para alinear al centro y justificar los elemento
+
+				  ejemplo: -_  -, quedaria - - -
+		*) md:flex	: lo mismo que el flex pero solo cuando sea md
+		*) el atributo for: apunta a una input donde el ID o # tengan el nombre dentro del for,
+		 		 por ejemplo aqui el "email" en el "for" lo que dice es que cuando le de click
+		 		 en el "label", me va a activar el input con "#email"
+
+			label.block.text-md.uppercase.text-gray-500.mb-3.py-3.font-bold(for="email") Tu email
+            		input#email.w-full.px-3.py-3.border.border-gray-300.rounded-xl.placeholder-
+            				green-400(placeholder="Tu email" type="email" name="email")
+
+            	*) noValidate: esto permite que no se valide un signo @ en una input tipo email, si se quita
+            			entonces eso permite que si muestre un mensaje que dice debe colocar
+            			un signo @
+
+            	*) md:gap-3: el gap hace que se separae por ejemplo "abc" en "a b c"
+    *) for en pug y select option: mucha atencion porque si le pones let te va a dar un error le puedes cambiar por "var"
+        select#habitacioens.( name="habitacioens")
+             option(value="") -seleccione-
+             - let n = 1; 
+                while n < 10
+                  option(value=n) #{n++} 
+
+
+
+	etiquetas)
+			*) span : letrero pero en linea con el texto antey posterior
+			*)
+			*) label : letrero pero en toda la fila
+			*)
+
+
+	sql)
+
+			*) INSERT INTO 'categorias' ('nombre') VALUES ('casa')
+			orm) Categoria.create({nombre:'casa'})
+
+	validaciones)
+
+			*) notEmpty()
+			*) isEmail()
+			*) isLength
+			*) withMessage
+			*) equals('password')
+
+
+//node comandos:
+
+*) leyendo carpetas y archivos:
+	c)
+	 para abrir carpetas
+	const fs= require('fs')
+	const path= require('path')
+	// ./data/airtrafic
+	path_file=path.join(__dirname,'data','airtrafic')
+
+	c)
+	para abrir el archivo
+	cosnt mainfunction=()=>{
+	fs.readfile(path_file,'utf-8',(err,data)=>{if(!error){console.log(data)}})
+	}
+
+*) leyendo archivos muy pesados:
+	fs.createReadStream(path_file,'utf-8').on('data',(data)=>{
+	console.log(Buffer.byteLength(data))})
+
+
+*) paquete "eventStream"
+	n:
+		tiene varios metodos entre ellos esta el split()
+		que es el que me ayuda a cortar cada pedaso de informacion
+		cuando sea por ejemplo salto de linea
+
+
+	s:
+	fs.createReadStream(path_file,'utf-8')
+	.pipe(es.split())
+	.on('data',(data)=>{
+	console.log(Buffer.byteLength(data))})
+
+	n:entonces ya se podra mirar la inormacion con saltos de linea
+	por defecto split tiene:
+	splite('\n') entonces es igual a splite()
+
+*) si queiro poer en comillas y que el letro tenga comillas debo usar diagonal invertiddo
+  " xxxx \"texto\"   xxx"
+
+

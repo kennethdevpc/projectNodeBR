@@ -64,7 +64,7 @@ const autenticar = async (req, res) => {
   //______Almacenar Cookie
   return res
     .cookie('_token', token, {
-      httpOnly: true, //para que el cookie  no sea accesible desde la api de javscript
+      httpOnly: true, //para que el cookie  no sea accesible desde la api de javascript
       secure: true, //si es https
       sameSite: true,
     })
@@ -76,7 +76,7 @@ const formularioRegistro = (req, res) => {
   console.log('Token csrf', req.csrfToken());
   res.render('auth/registro', {
     pagina: 'crear cuenta',
-    csrfToken: req.csrfToken(),
+    csrfToken: req.csrfToken(), //para verificar que lo que viene del reques viene de esa URL y que eso no se envia desde una terminal
   });
 };
 //------post fromulario registro
@@ -84,7 +84,10 @@ const registrar = async (req, res) => {
   await check('nombre').notEmpty().withMessage('Nombre no puede ir vacio ').run(req);
   await check('email').isEmail().withMessage('Debe colocar un email valido ').run(req);
   await check('password').isLength({ min: 6 }).withMessage('password corta ').run(req);
-  await check('repetir_password').equals(req.body.password).withMessage('password diferente?').run(req);
+  await check('repetir_password')
+    .equals(req.body.password)
+    .withMessage('password diferente?')
+    .run(req);
   let resultado = validationResult(req);
 
   //__________comprobando si el formlario es vacio
@@ -96,13 +99,13 @@ const registrar = async (req, res) => {
         nombre: req.body.nombre,
         email: req.body.email,
       },
-      csrfToken: req.csrfToken(),
+      csrfToken: req.csrfToken(), 
     });
   }
 
   const { nombre, email, password } = req.body;
   const existeUsuario = await Usuario.findOne({ where: { email } });
-  //__________comprobando si el usuario esta reistrado
+  //__________comprobando si el usuario esta registrado
   if (existeUsuario) {
     return res.render('auth/registro', {
       pagina: 'crear cuenta',
@@ -157,7 +160,7 @@ const confirmar = async (req, res, next) => {
   usuario.confirmado = true;
   await usuario.save();
   return res.render('auth/confirmar-cuenta', {
-    pagina: 'Error al confirmar cuenta',
+    pagina: 'No hay Error al confirmar cuenta',
     mensaje: 'Inicia seccion se ha confirmado token',
     error: false,
   });
@@ -182,7 +185,7 @@ const resetPassword = async (req, res) => {
       errores: resultado.array(),
     });
   }
-  //__________Obtiene un request.body y busca asi el uesuario esxiste
+  //__________Obtiene un request.body y busca si el usuario existe
   const { email } = req.body;
   const usuario = await Usuario.findOne({ where: { email } });
   //__________comprobando si el usuario esta reistrado
@@ -208,7 +211,7 @@ const resetPassword = async (req, res) => {
 
   //------------Mostrar mensaje de confirmacion
   res.render('templates/mensaje', {
-    pagina: 'CEnvio de reestablecimiento de contraseña',
+    pagina: 'Envio de reestablecimiento de contraseña',
     mensaje: 'hemos enviado un Email de restablecimiento de contraseña',
   });
 };
@@ -240,7 +243,10 @@ const comprobarToken = async (req, res, next) => {
 const nuevoPassword = async (req, res) => {
   //validar password
   await check('password').isLength({ min: 6 }).withMessage('password corta ').run(req);
-  await check('repetir_password').equals(req.body.password).withMessage('password diferente?').run(req);
+  await check('repetir_password')
+    .equals(req.body.password)
+    .withMessage('password diferente?')
+    .run(req);
   let resultado = validationResult(req);
   //__________comprobando si el formlario es vacio
   if (!resultado.isEmpty()) {

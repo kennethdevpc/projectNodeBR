@@ -26,7 +26,9 @@ router.get('/olvide-password/:token', comprobarToken);
 router.post('/olvide-password/:token', nuevoPassword);
 
 router.get('/', (req, res) => {
-  res.json({ mensaje: 'hola mundo en expres2 con post' });
+  res.json({ mensaje: 'hola mundo en expres2 desde rutas usuario' });
 });
+
+//rutas anidadas buscar en bloc pasos 2023: "rutas anidadas"
 
 export default router;
