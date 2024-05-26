@@ -1965,6 +1965,33 @@ tailwindcss
 
         });
 
+  32.6) preparando la informacion del mapa para la base de datos
+  U: views/propiedades/crear.pug
+  s:  ...
+      .
+      h3.text-lg.leading-10.font-medium.text-gray-900 IUbicacion
+        p.text-gray-600 Ubicacion de la propiedead en el mapa
+        #mapa.w-xl.h-96
+
+        div 
+          p.calle //esta es la clase "calle"
+          input(type="hidden" name="calle" id="calle")
+          input(type="hidden" name="lat" id="lat")
+          input(type="hidden" name="lng" id="lng")
+  N : etonces para llenar el "P" en el front que esta vacio inicialmente, pues se 
+  hace en el codigo del mapa el llamado de la calle y se muestra posterior en ese campo
+  u:  src/js/mapa.js
+  s:
+    //llenar los campos
+      document.querySelector('.calle').textContent = resultado.address.Address ?? '';
+
+  n para que se guarde en la base de datos debo agregar eso al input calle:
+  s:
+      document.querySelector('#calle').value = resultado?.address?.Address ?? '';
+
+  n: al inspeccionar y ubicr el puntero me mostrara algo como esto :
+  <input type="hidden" name="lat" id="lat" value="20.675542997511">
+
 
 
 

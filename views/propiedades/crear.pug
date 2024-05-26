@@ -57,11 +57,22 @@ block contenido
              - var n = 5; 
                 while n < 10
                   option(value=n) #{n++}
+      .border-gray-200.border-t.py-5.space-y-5
+
+        h3.text-lg.leading-10.font-medium.text-gray-900 IUbicacion
+        p.text-gray-600 Ubicacion de la propiedead en el mapa
+        #mapa.w-xl.h-96
+
+        div 
+          p.calle
+          input(type="hidden" name="calle" id="calle")
+          input(type="hidden" name="lat" id="lat")
+          input(type="hidden" name="lng" id="lng")
 
 
-      h1 contenido 
-      h1 contenido 
-      #mapa.w-xl.h-96
+
+
+
   div.y-10
     h1 hola
 block scripts

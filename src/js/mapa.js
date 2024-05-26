@@ -39,6 +39,13 @@
 
       //si quiero agregar un popup que me diga la informacion de esa calle en ese pin
       marker.bindPopup(resultado.address.LongLabel)
+
+      //llenar los campos
+      document.querySelector('.calle').textContent = resultado?.address?.Address ?? '';
+      document.querySelector('#calle').value = resultado?.address?.Address ?? '';
+      document.querySelector('#lat').value = resultado?.latlng?.lat ?? '';
+      document.querySelector('#lng').value = resultado?.latlng?.lng ?? '';
+
       
     })
 
