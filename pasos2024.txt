@@ -1993,6 +1993,181 @@ tailwindcss
   <input type="hidden" name="lat" id="lat" value="20.675542997511">
 
 
+33) Creando los modelos de propiedad
+  u: models/Propiedad.js
+  u: models/Categoria.js
+  u: models/Precio.js
+
+  33.0) agrego al crear
+  u: views/propiedades/crear.pug
+  s: div
+         label.block.text-md.uppercase.text-gray-500.mb-3.py-3.font-bold(for="descripcion") Descripcion
+         textarea#descripcion.w-full.px-3.py-3.border.border-gray-300.rounded-xl.placeholder-green-400(placeholder="Descripcion" name="descripcion")
+
+  n: tamien lo podria hacer de la forma2: usando clases
+          label(class="block text-sm uppercase text-gray-500 mb-3 font-bold" for="descripcion") Descripcion
+
+  33.1) agrego campos a el modelo propiedad:
+  u: models/Propiedad.js
+  s: import { DataTypes } from 'sequelize';
+  
+    import db from '../config/db.js';
+
+    const Propiedad = db.define('propiedades', {
+      id: {
+        type: DataTypes.UUID,
+        defaultValue: DataTypes.UUIDV4,
+        allowNull: false,
+        primaryKey: true,
+      },
+      titulo: {
+        type: DataTypes.STRING(100),
+        allowNull: false,
+      },
+      Descripcion: {
+        type: DataTypes.TEXT,
+        allowNull: false,
+      },
+      Habitaciones: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+      },
+      estacionamiento: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+      },
+      wc: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+      },
+      calle: {
+        type: DataTypes.STRING(60),
+        allowNull: false,
+      },
+      lat: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      lng: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      imagen:{
+        type: DataTypes.STRING,
+        allowNull:false
+      },
+      publicado: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: false
+      }
+    });
+
+    export default Propiedad;
+
+34) creando modelo de precio y categoria
+  u: models/Categoria.js
+  s:
+    import { DataTypes } from 'sequelize';
+    import db from '../config/db.js';
+    const Categoria = db.define('categorias', {
+      nombre: {
+        type: DataTypes.STRING(30),
+        allowNull: false,
+      }
+    });
+    export default Categoria;
+
+  u: models/Precio.js
+  s:
+      import { DataTypes } from 'sequelize';
+    import db from '../config/db.js';
+
+    const Precio = db.define('precios', {
+      
+      nombre: {
+        type: DataTypes.STRING(30),
+        allowNull: false,
+      },
+    });
+
+    export default Precio;
+    34.1) nota super importante:
+    la table de los modelos solo se crea cuando se hacen post 
+    es decir inicialmente no se crea la tabl solo hhaste
+    que se haga un post o se queira llenar la tabla, por eso mejor se creara un seeder
+    para precio y para categoria
+
+35) creo el seeder:
+  u: seed/seeder.js
+  35.1) creo el seeder de los modelos
+  u:seed/categorias.js
+  s: 
+    const categorias = [
+      {nombre:'Casa'},
+      {nombre:'Departamento'},
+      {nombre:'Bodega'},
+      {nombre:'Terreno'},
+      {nombre:'Cabaña'},
+    ]
+    export default categorias;
+  35.2) llamo a ese seed de cartegorias al seeder principal:
+  u: seed/seeder.js
+  n: exit(1) es error
+     exit() es que termina el proceso pero sin error
+  n: el uso del Exit (se salie inmediatamente despues de algun error) 
+   puede ser de 2 formas:
+
+    forma1: no importo nada lo uso directo
+    const importarDatos = async () => {
+        try {
+          
+        } catch (error) {
+          console.log(error);
+          process.exit(1); //forma1 termina el proceso inmediatamente
+        }
+      }
+    forma2:
+      s:
+        import {exit} from 'node:process' //forma 2 de uso de exit
+        const importarDatos = async () => {
+          try {
+          } catch (error) {
+            exit(1); //forma 2 de uso de exit
+          }
+        }
+
+  s:
+      // import {exit} from 'node:process' //forma 2 de uso de exit
+    import categorias from "./categorias"; //puedo importarlo con un nombre cualqueira ya que es un export default
+    import Categoria from "../models/Categoria";
+    import db from "../config/db";
+
+    const importarDatos = async () => {
+      try {
+        //autenticar
+        await db.authenticate()
+
+        //Generar las columbas
+        await db.sync()
+
+        //Insertamos los datos
+        await Categoria.bulkCreate(categorias)  //le paso al modelo esas categorias creadas en el arreglo de objeto 
+        console.log("Datos Importados correctamente")
+        
+      } catch (error) {
+        console.log(error);
+        process.exit(1); //termina el proceso inmediatamente
+        // exit(1); //forma 2 de uso de exit
+      }
+    }
+
+  35.3)
+
+
+
+
+
 
 
 
@@ -2178,6 +2353,11 @@ info general) estilos co pug:
 			*) equals('password')
 
 
+
+
+
+
+
 //node comandos:
 
 *) leyendo carpetas y archivos:
@@ -2219,4 +2399,8 @@ info general) estilos co pug:
 *) si queiro poer en comillas y que el letro tenga comillas debo usar diagonal invertiddo
   " xxxx \"texto\"   xxx"
 
+*) 
+    export default categorias; 
+    import w from "./categorias"; //puedo importarlo con un nombre cualquiera si es un export default desde donde se llama
+*
 

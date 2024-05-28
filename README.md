@@ -26,6 +26,7 @@ introduccion:
   - inicio de crear mapa
   - creacion de archivo que ejecuta varios scrips del packagejson
   - continuacion de mapa
+  -Creando los modelos de propiedad
 
 
     ## resteo password:
