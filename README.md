@@ -26,7 +26,9 @@ introduccion:
   - inicio de crear mapa
   - creacion de archivo que ejecuta varios scrips del packagejson
   - continuacion de mapa
-  -Creando los modelos de propiedad
+  - Creando los modelos de propiedad
+  - cree ya categoria precio y seeder
+  - ejecucion del seeder
 
 
     ## resteo password:
