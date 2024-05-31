@@ -181,7 +181,7 @@ npm run css
 
 
 
-    n: si quiero ver(mostrar, recibir, enviada, pasar) la info que se envia
+    n: si quiero ver(mostrar, recibir, enviada, pasar, enviar) la info que se envia
     desde controlador
       s:	html
         h1=autenticado
@@ -1672,7 +1672,7 @@ tailwindcss
 		  });
 		};
 		//fiormlario para crear propiedad
-		const crear = (rew, res) => {
+		const crear = (req, res) => {
 		  res.render('propiedades/crear', {
 		    pagina: 'Crear propiedad',
 		    barra: true,
@@ -2233,6 +2233,16 @@ tailwindcss
     const b=  Precio.bulkCreate(precios)  //le paso al modelo esas categorias creadas en el arreglo de objeto 
     await Promise.all([a,b])
 
+  35.5)teoria sobre promise.all
+  n si yo quiero que todas las promesas se terminen de ejectuatr y luego despues de esos terminar el proceso 
+  pues lo hago asi y para este ejemplo no se esta asignando a nada 
+
+  s:  await Promise.all([a,b])
+
+  n: pero si queiro asignar esos resultados:
+  s:
+    const [aresult,bresult] = await Promise.all([a,b])
+
 36) eliminar datos de la tabla de la base datos con el seeder:
   u: seed/seeder.js
   n: el truncate lo que hace es que reinicia los ID desde el Numero 1 
@@ -2258,8 +2268,8 @@ tailwindcss
     }
 
   36.2) coloco el process que me llamara esa fucnion:
-  u: seed/seeder.js
-  s:
+    u: seed/seeder.js
+    s:
     if (process.argv[2] === "-e") {   
       eliminarDatos();
 
@@ -2270,6 +2280,59 @@ tailwindcss
      "scripts": {
       "db:eliminar": "node ./seed/seeder.js -e"
      }
+    36.2.3) forma 2 de eliminar datos
+    s:
+        const eliminarDatos = async () => {
+        try {
+          .....
+
+          // Forma2 de eliminar datos de la base de datos
+          await db.sync({ force: true });
+
+          console.log('Datos eliinados correctamente');
+          process.exit();
+            } catch (error) {
+              console.log(error);
+              process.exit(1);
+              
+            }
+        }
+
+37) poniendo los datos de precio y categoria en el formulario
+    u: controllers/propiedadController.js
+    s:
+
+      import Precio from '../models/Precio.js'
+      import Categoria from '../models/Categoria.js'
+      ...
+      ..
+      .
+      const crear = async (req, res) => {
+
+      //consultar modelo de precios y categorias
+      const [categorias, precios] = await Promise.all([
+        Categoria.findAll(),
+        Precio.findAll();
+        
+      ])
+        res.render('propiedades/crear', {
+        pagina: 'Crear propiedad',
+        barra: true,
+        categorias,     //aqui le paso el la consulta de la DB
+        precios         //aqui le paso el la consulta de la DB
+      });
+    };
+
+    37.1) hora para mostrarlo tengo que interar 
+
+      U: views/propiedades/crear.pug
+      s:
+        select#categoria.w-full.px-3.py-3.border.border-gray-300.rounded-xl.placeholder-green-400( name="categoria")
+             option(value="") -seleccione-
+              each categoria in categorias    //agregado
+                option(value=categoria.id)=categoria.nombre  //agregado
+    
+
 
 
 
@@ -2443,12 +2506,17 @@ info general) estilos co pug:
             			un signo @
 
             	*) md:gap-3: el gap hace que se separae por ejemplo "abc" en "a b c"
-    *) for en pug y select option: mucha atencion porque si le pones let te va a dar un error le puedes cambiar por "var"
+    *) while y for en pug y select option: mucha atencion porque si le pones let te va a dar un error le puedes cambiar por "var"
         select#habitacioens.( name="habitacioens")
              option(value="") -seleccione-
              - let n = 1; 
                 while n < 10
                   option(value=n) #{n++} 
+      *) for en pug:
+      each item in items
+          if count < 3
+            li= item.name
+          - count++;
 
 
 

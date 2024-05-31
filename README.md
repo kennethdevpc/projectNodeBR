@@ -29,6 +29,7 @@ introduccion:
   - Creando los modelos de propiedad
   - cree ya categoria precio y seeder
   - ejecucion del seeder
+  - poniendo la informacion en el formulario: poniendo los datos de precio y categoria en el formulario
 
 
     ## resteo password:
