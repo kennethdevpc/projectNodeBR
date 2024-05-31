@@ -2207,19 +2207,76 @@ tailwindcss
     msj: Datos Importados correctamente
 
      n: y ya deberia aparecer la tabla en el a base de datos.
-  
   35.4) creo el seeder para precios
-  U:seed/precios.js
-  s:
-     const precios = [
-      {        nombre: '0 - $10,000 USD',
-      },
-      {        nombre: '$10,000 - $30,000 USD',
-      },
-      
-    ];
+    U:seed/precios.js
+    s:
+      const precios = [
+        {        nombre: '0 - $10,000 USD',
+        },
+        {        nombre: '$10,000 - $30,000 USD',
+        },
+        
+      ];
 
-    export default precios;
+      export default precios;
+    
+    n: despues debo de lalmarlo en :
+    u: seed/seeder.js
+    s:
+      import precios from './precios.js';
+      import Precio from '../models/Precio.js';
+      await Precio.bulkCreate(precios)  //le paso al modelo esas categorias creadas en el arreglo de objeto 
+  35.5) promise all
+  u:seed/seeder.js
+  s: 
+    const a=  Categoria.bulkCreate(categorias)  //le paso al modelo esas categorias creadas en el arreglo de objeto 
+    const b=  Precio.bulkCreate(precios)  //le paso al modelo esas categorias creadas en el arreglo de objeto 
+    await Promise.all([a,b])
+
+36) eliminar datos de la tabla de la base datos con el seeder:
+  u: seed/seeder.js
+  n: el truncate lo que hace es que reinicia los ID desde el Numero 1 
+  ya que si no se hace el truncate si tenia 10 registros y los elimna 
+  empieza desde el ultimo ID osea ID=10
+  n: where: {}  Lo que hace es limpiar todas las categorias
+
+  s:
+    const eliminarDatos = async () => {
+      try {
+        await Promise.all([
+          Categoria.destroy({ where: {}, truncate: true }),
+          Precio.destroy({ where: {}, truncate: true }),
+        ]);
+        console.log("Datos eliinados correctamente")
+        process.exit();
+        
+      } catch (error) {
+        console.log(error);
+        process.exit(1);
+        
+      }
+    }
+
+  36.2) coloco el process que me llamara esa fucnion:
+  u: seed/seeder.js
+  s:
+    if (process.argv[2] === "-e") {   
+      eliminarDatos();
+
+    }
+    36.2.2)
+    u: package.json
+    s:
+     "scripts": {
+      "db:eliminar": "node ./seed/seeder.js -e"
+     }
+
+
+
+
+
+
+
   
 
    
