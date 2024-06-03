@@ -2422,6 +2422,95 @@ sintaxis: Estudiante.belongsToMany(Clase,{through:HorarioClase})
       Propiedad.belongsTo(Categoria, { foreignKey: 'categoriaId' });
       Propiedad.belongsTo(Usuario, { foreignKey: 'usuarioId' });
 
+39) añadiendo CSRF y validacion al formulario
+  u: routes/propiedadesRoutes.js
+  n: le agrgo ala route la funcion y la ruta de post
+  s:
+    import { admin, crear, guardar } from '../controllers/propiedadController.js';
+    router.post('/propiedades/crear', guardar);
+
+
+  39.1)  creo el cortrolador 
+  U: controllers/propiedadController.js
+  s: 
+    const guardar = (req,res) => {}
+  
+  39.2) añadiendo validacion desde el routing y no desde el controller
+  u: routes/propiedadesRoutes.js
+  n: se importa el body, ya que ahora se hace es desde el routing
+  s:
+    import { body } from 'express-validator' //Este a diferencia del controller que llamaba 
+    
+    router.post('/propiedades/crear',
+    body('titulo').notEmpty().withMessage('Tittulo no puede ir vacio'),
+    guardar);
+
+  n: //en el cotnroler importaba antes:check, validationResult, ahora solo llama al body
+      //pero el validationResult si lo llama en el controlador para mostrar los mensajes
+    import { check, validationResult } from 'express-validator'
+
+   39.2.2)
+    n: algo interesante es que aqui no hay necesidad de utilizar en async await, ni el run al final
+    ejm: 
+      await check('nombre').notEmpty().withMessage('Nombre no puede ir vacio ').run(req);
+
+  39.3) como muestro ahora entonces los mensajes de error:
+   u: controllers/propiedadController.js
+   s: 
+    import { validationResult } from 'express-validator';
+    const guardar = async (req, res) => {
+      //validacion
+      let resultado = validationResult(req);
+    
+
+      //__________comprobando si el formlario es vacio
+      if (!resultado.isEmpty()) {
+        //consultar modelo de precios y categorias
+          const [categorias, precios] = await Promise.all([Categoria.findAll(), Precio.findAll()]);
+
+        return res.render('propiedades/crear', {
+          pagina: 'Crear propiedad',
+          barra: true,
+          csrfToken: req.csrfToken(), //este se coloca porque cuando si quiere reenviar oravez el formulario pues ya no tiene toquen y pues entonces necesia este token 
+          categorias,
+          precios,
+          errores: resultado.array(),
+        });
+      }
+    };
+
+
+
+  39.4) creo el boton de anadir y el validador de CSRF
+
+   u: views/propiedades/crear.pug
+   s:
+    form.space-y-2(method="POST" action="/propiedades/crear")
+      input(type="hidden" name="_csrf" value=csrfToken)
+
+     input(class="w-full py-3 bg-indigo-600 hover:bd-indigo-700 rounde text-white font-bold uppercase cursor-pointer" 
+      type="submit" value="Añadir imagen" )
+
+  39.5) antes de todo no olvidar pasar el _CSRF al front 
+  donde se renderiza el formulario de crear propiedad:
+  u: controllers/propiedadController.js
+  s:
+      const crear = async (req, res) => {
+      //consultar modelo de precios y categorias
+      const [categorias, precios] = await Promise.all([Categoria.findAll(), Precio.findAll()]);
+
+      res.render('propiedades/crear', {
+        pagina: 'Crear propiedad',
+        barra: true,
+        csrfToken: req.csrfToken(),// este es importante en los formularios el csrfToken es decir le paso a lavista esto para que cuando haga post no haya errores de csrf
+        categorias,
+        precios,
+      });
+    };
+  
+
+
+
 
 
 

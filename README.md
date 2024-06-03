@@ -32,6 +32,8 @@ introduccion:
   - poniendo la informacion en el formulario: poniendo los datos de precio y categoria en el formulario
   - relaciones 
   - relacion belongs to 
+  - creacion del endpoint para enviar la informacion del Crear propiedades
+  -validaciones desde el routin 
 
 
     ## resteo password:
