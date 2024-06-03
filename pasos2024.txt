@@ -2280,6 +2280,12 @@ tailwindcss
      "scripts": {
       "db:eliminar": "node ./seed/seeder.js -e"
      }
+
+    n: ejecuto el comando para que se eliminarDatos entonces:
+    voy a la terminal y ejecuto 👍
+    c:
+      npm run db:eliminar
+
     36.2.3) forma 2 de eliminar datos
     s:
         const eliminarDatos = async () => {
@@ -2332,6 +2338,102 @@ tailwindcss
               each categoria in categorias    //agregado
                 option(value=categoria.id)=categoria.nombre  //agregado
     
+
+38) relaciones:
+Asociaciones:
+Sequalize soporta todo tipo de relaciones:
+1:1
+1:N
+N:N
+
+Metodos:
+hasOne: reclacion 1:1, 1 registro solo puede tener 1 registro asociado de otra tabla
+ejmplo:  Propiedad tiene una Vendedor 
+sintaxis: Vendedor.hasOne(Propiedad)  /7 parece que mas bien se lee de derecha a izquierda
+nota: en este ejmplo propiedad deber'a tener una llave foranea que hga referencia a 1 vendedor
+si no se espeifica sequalize genera una
+
+belongsTo: reclacion 1:1, 1 registro solo puede tener 1 registro asociado de otra tabla
+sintaxis: Propiedad.belongsTo(Vendedor), pertenece
+nota: en este ejmplo propiedad deber'a tener una llave foranea que hga referencia a 1 vendedor
+si no se espeifica sequalize genera una
+
+la unica diferrencia entre belongs y hasone es la sinstaxis
+
+
+hasMany: reclacion 1:N, 1 registro  puede tener multiples registro asociados de otra tabla
+ejemplo: un Vendedor tiene multiples Propiedades, un Usuario tiene multiples Posts
+Sintaxis: 
+	Vendedor.hasMany(Propiedad)
+	Propiedad.belongsTo(Vendedor)
+	
+	
+Nota: en este ejemplo propiedad deberia tener una llave foranea que haga referencia a1 vendedor
+si no se espeifica sequalize genera una
+
+
+belongsToMany: reclacion N:N, 1 registro  puede tener multiples registro asociados de otra tabla y viceversa
+se utiliza una tabla pivote
+
+sintaxis: Estudiante.belongsToMany(Clase,{through:HorarioClase})  
+
+|38.1) Ejemplo belongsTo
+  para crear las relaciones en este tutorial se sugiere
+  crear un archivo que llame los modelos y luego que haga las relaciones
+  u: models/index.js  //creo este archivo
+  s:
+    import Propiedad from './Propiedad.js'
+    import Precio from './Precio.js'
+    import Categoria from './Categoria.js'
+    import Usuario from './Usuario.js'
+
+    Precio.hasOne(Propiedad); //foreignKey por defecto
+    Precio.hasOne(Propiedad,{foreignKey:"llaveforaceadeprecio"}); //si queiro cambiarle el nombre por defetcto de la foreignKey
+    //la forma 2 sera con belongs pero en ambas la llaveforanea estara en Propiedades
+    Propiedad.belongsTo(Precio)
+    Propiedad.belongsTo(Precio, { foreignKey: 'llaveforaceadeprecioconbelongs' });
+    
+
+    export {  
+      Propiedad,
+      Precio,
+      Categoria,
+      Usuario
+    }
+
+   38.1.2) 
+   si 
+  38.2) En esta parte toca mencionar que con las relaciones ahora los 
+  elementos que llaman a los modelos ya tendria que llamar desde este archivo 
+  al correspondiente modelo que ya tiene la relacion tambien 
+  
+  n: entonces en los seeder que llamaba los modelos ahora los llama 
+  de tal manera que ya tenga la relacion:
+
+  s:
+    // import Categoria from '../models/Categoria.js';  //se quitan ya qeu ahora se llama desde donde tiene las relaciones
+    // import Precio from '../models/Precio.js';    //esto tiene solo el modelo
+    import {Categoria, Precio} from '../models/index.js' //esto tiene el modelo y las relaciones
+
+  38.3) despues de haber creado el archivo de las reclaciones entonces ahora puedeo crear las relaciones:
+  u: models/index.js
+  s:
+      Propiedad.belongsTo(Precio, { foreignKey: 'precioId' });
+      Propiedad.belongsTo(Categoria, { foreignKey: 'categoriaId' });
+      Propiedad.belongsTo(Usuario, { foreignKey: 'usuarioId' });
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -1,8 +1,7 @@
 // import {exit} from 'node:process' //forma 2 de uso de exit
 import categorias from "./categorias.js"; //puedo importarlo con un nombre cualqueira ya que es un export default
 import precios from './precios.js';
-import Categoria from '../models/Categoria.js';
-import Precio from '../models/Precio.js';
+import { Categoria, Precio } from '../models/index.js'  //esto tiene el modelo y las relciones
 
 import db from "../config/db.js";
 
