@@ -33,7 +33,8 @@ introduccion:
   - relaciones 
   - relacion belongs to 
   - creacion del endpoint para enviar la informacion del Crear propiedades
-  -validaciones desde el routin 
+  -validaciones desde el routin
+  - agregando validaciones a propiedades, autorrellno de campos que si pasaron validaciones, autoseleccionar los select que si pasaron la validacion 
 
 
     ## resteo password:

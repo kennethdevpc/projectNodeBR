@@ -19,6 +19,7 @@ const crear = async (req, res) => {
     csrfToken: req.csrfToken(),
     categorias,
     precios,
+    datos:{}
   });
 };
 const guardar = async (req, res) => {
@@ -40,6 +41,7 @@ const guardar = async (req, res) => {
       categorias,
       precios,
       errores: resultado.array(),
+      datos: req.body,
     });
   }
 };

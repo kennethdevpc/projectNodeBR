@@ -2507,7 +2507,105 @@ sintaxis: Estudiante.belongsToMany(Clase,{through:HorarioClase})
         precios,
       });
     };
-  
+  39.6) Añadiendo resto de validaciones
+    u: routes/propiedadesRoutes.js
+    s:
+      body('descripcion')
+        .notEmpty()
+        .withMessage('Descripcion no puede ir vacio')
+        .isLength({ max: 50 })
+        .withMessage('La descripcion es muy larga'),
+      body('categoria').isNumeric().withMessage('selecciona una categoria'),
+      body('precio').isNumeric().withMessage('selecciona un rango de precios'),
+      body('habitaciones').isNumeric().withMessage('selecciona una cantidad de Habitaciones'),
+      body('estacionamiento').isNumeric().withMessage('selecciona una cantidad de Estacionamientos'),
+      body('wc').isNumeric().withMessage('selecciona un rango una cantidad de Baños'),
+      body('lat').notEmpty().withMessage('selecciona la propiedad en el mapa'),
+      body('lng').notEmpty().withMessage('selecciona la propiedad en el mapa'),
+  39.7) autorrelleno
+    u: controllers/propiedadController.js
+    n: le paso a la vista lo que viene por body:
+    s:
+      return res.render('propiedades/crear', {
+        ..
+        .
+        datos: req.body
+      });
+    39.7.2) 
+      n: voy a la vista y al value le pongo el valor de el dato 
+      u: views/propiedades/crear.pug
+      s: input#titulo.w-full.px-3.py-3.border.border-gray-300.rounded-xl.placeholder-green-400(placeholder="Titulo Propiedade, ej. Casa en la playa" 
+         type="text" name="titulo" value=datos.titulo?datos.titulo:"" )
+
+      n: //para el textarea que no tiene un Value se coloca afuera osea se le manda un mensaje
+      s:
+         textarea#descripcion.w-full.px-3.py-3.border.border-gray-300.rounded-xl.placeholder-green-400(placeholder="Descripcion" 
+         name="descripcion" )=datos.descripcion?datos.descripcion:""
+
+    39.7.2.2) mucha atencion como al principi de todo no se envia datos
+    puede marcarme un error ya que no estoy mandando "datos" y el front necesita ahora eso
+    en cada field 
+      n: entonces le mandare desde el controler Crear:
+      u: controllers/propiedadController.js
+      s: 
+
+          const crear = async (req, res) => {
+          //consultar modelo de precios y categorias
+          const [categorias, precios] = await Promise.all([Categoria.findAll(), Precio.findAll()]);
+
+          res.render('propiedades/crear', {
+            ...
+            ..
+            datos:{}    //Le mando esto pero vacio
+          });
+        };
+    39.8) autorrelleno para listas con for each
+      u: views/propiedades/crear.pug
+      s: //tengo esto inicialemnte
+        select#categoria.w-full.px-3.py-3.border.border-gray-300.rounded-xl.placeholder-green-400( name="categoria")
+             option(value="") -seleccione-
+              each categoria in categorias
+                option(value=categoria.id)=categoria.nombre
+
+      n:pero entonces necesito que cada vez que se va contruyento las opciones 
+      pase por cada una y verifique si la categoria (en el caso de haber sido seleccionada oviamente)
+      coincide con el id que lleva el "for each"
+      n: el selected pone en subrayado si esta en true
+      s:
+        each categoria in categorias
+                option(value=categoria.id selected=datos.categoria?datos.categoria==
+                categoria.id?true:false
+                :null )=categoria.nombre
+      n: como ven verifico que exista datos.caegoria si no existe entonces null, si existe 
+      busque y indique cual de todas es para ponerle el true y cual no para poerle el false
+      
+      39.8.1)
+        para precios tambien : 
+        s:
+        option(value=precio.id selected=datos.precio?datos.precio==
+                precio.id?true:false
+                :null )=precio.nombre
+      
+      39.8.2) 
+        Para los habitaciones dcon el while y estacionamiento con el while tambien 
+        s:
+        option(value="") -seleccione-
+             - var n = 5; 
+                while n < 10
+                  option(value=n selected=datos.habitaciones?datos.habitaciones==
+                n?true:false
+                :null ) #{n++} 
+
+        option(value="") -seleccione-
+             - var n = 5; 
+                while n < 10
+                  option(value=n selected=datos.estacionamiento?datos.estacionamiento==
+                  n?true:false
+                  :null) #{n++}
+
+
+
+
 
 
 
@@ -2698,7 +2796,7 @@ info general) estilos co pug:
 
             	*) md:gap-3: el gap hace que se separae por ejemplo "abc" en "a b c"
     *) while y for en pug y select option: mucha atencion porque si le pones let te va a dar un error le puedes cambiar por "var"
-        select#habitacioens.( name="habitacioens")
+        select#Habitaciones.( name="Habitaciones")
              option(value="") -seleccione-
              - let n = 1; 
                 while n < 10
