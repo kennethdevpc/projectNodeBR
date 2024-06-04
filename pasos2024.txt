@@ -2559,7 +2559,7 @@ sintaxis: Estudiante.belongsToMany(Clase,{through:HorarioClase})
             datos:{}    //Le mando esto pero vacio
           });
         };
-    39.8) autorrelleno para listas con for each
+  39.8) autorrelleno para listas con for each
       u: views/propiedades/crear.pug
       s: //tengo esto inicialemnte
         select#categoria.w-full.px-3.py-3.border.border-gray-300.rounded-xl.placeholder-green-400( name="categoria")
@@ -2602,6 +2602,35 @@ sintaxis: Estudiante.belongsToMany(Clase,{through:HorarioClase})
                   option(value=n selected=datos.estacionamiento?datos.estacionamiento==
                   n?true:false
                   :null) #{n++}
+  39.9) autorrelleno del mapa:
+
+
+    u: views/propiedades/crear.pug
+    s:
+          p.calle= datos.calle?datos.calle:''
+          input(type="hidden" name="calle" id="calle" value=datos.calle?datos.calle:'')
+          input(type="hidden" name="lat" id="lat" value=datos.lat?datos.lat:'')
+          input(type="hidden" name="lng" id="lng" value=datos.lng?datos.lng:'')
+    39.9.2)
+      
+      n: para esto tenemos que tener en cuenta que el mapa ya tiene unos datos por defectos 
+      cuando se ejecuta:
+      u: src/js/mapa.js
+      s: //actualmente tiene esto , entonces cada vez que se vuelva a recargar la pagina entonces
+      recargara estos datos
+        const lat = 20.67444163271174;
+        const lng = -103.38739216304566;
+      n: por lo tanto se debe de colocar o reemplazar esto si en caso de que ya haya seleccionado las cordenadas.
+      el front ya tiene los datos.lat y .lng entonces puedo leerlos:
+
+      s:
+        const lat = document.querySelector('#lat').value || 20.67444163271174;
+        const lng = document.querySelector('#lng').value || -103.38739216304566;
+
+    
+
+
+
 
 
 
@@ -2880,4 +2909,11 @@ info general) estilos co pug:
     export default categorias; 
     import w from "./categorias"; //puedo importarlo con un nombre cualquiera si es un export default desde donde se llama
 *
+
+*) operador Logical_OR  ( || )
+  si lo de la IZQ  existe toma lo de la izq, sino lo de la derecha
+  ejm:
+     const lat = document.querySelector('#lat').value || 20.67444163271174;
+    const lng = document.querySelector('#lng').value|| -103.38739216304566;
+
 
