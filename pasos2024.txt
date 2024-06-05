@@ -2627,6 +2627,52 @@ sintaxis: Estudiante.belongsToMany(Clase,{through:HorarioClase})
         const lat = document.querySelector('#lat').value || 20.67444163271174;
         const lng = document.querySelector('#lng').value || -103.38739216304566;
 
+  39.10) lectura de datos y  guardado de esa info del formulario
+    u: controllers/propiedadController.js
+    en funcion "guardar"
+    s: primero quito los modelos importados y los agrego desde el archivo : ()
+    s: 
+        import Precio from '../models/Precio.js';  //los quito
+        import Categoria from '../models/Categoria.js';  //los quito
+      import { Precio, Categoria, Propiedad } from '../models/index.js';    //lo pongo 💢
+
+      //__________creando registro
+        console.log(req.body)
+        const {
+          titulo,
+          descripcion,
+          habitaciones,
+          estacionamiento,
+          wc,
+          calle,
+          lat,
+          lng,
+          precio: precioId,  //aqui no es un objeto slo que al hacer destructuring le doy el nombre de "precioId" a esa propiedad destructurada que probiene del body
+          categoria
+        } = req.body; //esto es el destructurin  
+
+        try {
+          const propiedadGuardada = await Propiedad.create({
+            titulo,
+            descripcion,
+            habitaciones,
+            estacionamiento,
+            wc,
+            calle,
+            lat,
+            lng,
+            precioId, //aqui como ya se renombro "precio"  por "precioId" a esa propiedad destructurada que probiene del body, entonces ya la puedo pasar con el nombre, realmente aqui seria precioId: precioId pero como tienen el mismo nombre lo puedo hacer en una solo nombre
+            categoriaId: categoria, //esta es la forma 2 en que le puedo pasar la informacion si viene el nombre de la variable diferente dese el front
+          });
+
+          
+        } catch (error) {
+          console.log(error)
+          
+        }
+
+ 
+   
     
 
 
@@ -2905,6 +2951,9 @@ info general) estilos co pug:
 *) si queiro poer en comillas y que el letro tenga comillas debo usar diagonal invertiddo
   " xxxx \"texto\"   xxx"
 
+
+Js, teoria importantes:
+
 *) 
     export default categorias; 
     import w from "./categorias"; //puedo importarlo con un nombre cualquiera si es un export default desde donde se llama
@@ -2915,5 +2964,30 @@ info general) estilos co pug:
   ejm:
      const lat = document.querySelector('#lat').value || 20.67444163271174;
     const lng = document.querySelector('#lng').value|| -103.38739216304566;
+
+*) Destructuring: en el destructuring puedo renombrar las variables tambien 
+ const {
+    lat
+    lng,
+    precio: precioId,  //aqui no es un objeto slo que al hacer destructuring le doy el nombre de "precioId" a esa propiedad destructurada que probiene del body
+    categoria: categoriaId,
+  } = req.body; //esto es el destructurin  
+
+*) guardado en sequlize (post)
+
+  const {
+      lat,
+      lng,
+      categoria
+      precio: precioId,  //aqui no es un objeto slo que al hacer destructuring le doy el nombre de "precioId" a esa propiedad destructurada que probiene del body
+      
+    } = req.body; 
+
+  const propiedadGuardada = await Propiedad.create({
+        lat: lat                //forma normal
+        categoriaId: categoria, //otro ejemplo de forma normal en que le puedo pasar la informacion si viene el nombre de la variable diferente dese el front
+        lng,  //es como lng:lng  //forma normalB
+        precioId, //aqui como ya se renombro "precio"  por "precioId" a esa propiedad destructurada que probiene del body, entonces ya la puedo pasar con el nombre, realmente aqui seria precioId: precioId pero como tienen el mismo nombre lo puedo hacer en una solo nombre
+      });
 
 
