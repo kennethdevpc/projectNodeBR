@@ -1,7 +1,9 @@
 // import {exit} from 'node:process' //forma 2 de uso de exit
 import categorias from "./categorias.js"; //puedo importarlo con un nombre cualqueira ya que es un export default
 import precios from './precios.js';
-import { Categoria, Precio } from '../models/index.js'  //esto tiene el modelo y las relciones
+import usuarios from './usuarios.js';
+
+import { Categoria, Precio, Usuario } from '../models/index.js'  //esto tiene el modelo y las relciones
 
 import db from "../config/db.js";
 
@@ -16,7 +18,8 @@ const importarDatos = async () => {
     //Insertamos los datos
     const a=  Categoria.bulkCreate(categorias)  //le paso al modelo esas categorias creadas en el arreglo de objeto 
     const b=  Precio.bulkCreate(precios)  //le paso al modelo esas categorias creadas en el arreglo de objeto 
-    await Promise.all([a,b])
+    const c=  Usuario.bulkCreate(usuarios)  //le paso al modelo esas categorias creadas en el arreglo de objeto 
+    await Promise.all([a,b,c])
     console.log("Datos Importados correctamente")
     
   } catch (error) {

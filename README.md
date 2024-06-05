@@ -37,6 +37,9 @@ introduccion:
   - agregando validaciones a propiedades, autorrelleno de campos que si pasaron validaciones, autoseleccionar los select que si pasaron la validacion 
   - autorrelleno de la informacion en el mapa
   - 9.10) lectura de datos y  guardado de esa info del formulario
+  - 40) seeder de usuarios
+  
+
 
 
     ## resteo password:
