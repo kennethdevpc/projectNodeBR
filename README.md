@@ -36,9 +36,10 @@ introduccion:
   -validaciones desde el routin
   - agregando validaciones a propiedades, autorrelleno de campos que si pasaron validaciones, autoseleccionar los select que si pasaron la validacion 
   - autorrelleno de la informacion en el mapa
-  - 9.10) lectura de datos y  guardado de esa info del formulario
+  - 39.10) lectura de datos y  guardado de esa info del formulario
   - 40) seeder de usuarios
-  
+  - 41) (99.) Creando un Custom Middleware para validar Rutas
+  - 41.3) ahroa para proteger la ruta con un token valido
 
 
 

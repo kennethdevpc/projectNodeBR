@@ -2695,7 +2695,90 @@ sintaxis: Estudiante.belongsToMany(Clase,{through:HorarioClase})
 
         const c=  Usuario.bulkCreate(usuarios)  //modificado
         await Promise.all([a,b,c])        //modificado
-  
+41) 99. Creando un Custom Middleware para validar Rutas
+    n creeo la siguiente ubicacion 
+    u: middelware/protegerRuta.js
+    s: const protegerRuta = async (req, res, next) => {
+        .....
+        console.log("desde el middelware")
+        next()
+      }
+      export default protegerRuta; 
+  41.2) 
+    u: routes/propiedadesRoutes.js
+    s: 
+      import protegerRuta from '../middelware/protegerRuta.js';
+      router.get('/mis-propiedades', protegerRuta, admin); //auqi se agrega el middelware
+      
+  41.3) ahroa para proteger la ruta con un token valido
+    n: debo leer el token actual, luego verificar
+     si es un token valido y esto se hace con el "verify" 
+    u:
+    s:
+        import jwt from "jsonwebtoken";
+        const protegerRuta = async (req, res, next) => {
+            //comprobar si hay un token 
+            const { _token } = req.cookies;
+            if (!_token) {
+              return res.redirect('/auth/login')  //lo direcciona a la ventana inicio de secion
+
+            }
+            //comprobar el token si es valido 
+            try {
+              const decoded = jwt.verify(_token, process.env.JWT_SECRET) //obtengo o verifico si existe ese token valido que no haya expirado
+              const usuario = await Usuario.findByPk(decoded.id) //encuentro el usuario que se logueo
+              console.log(usuario)
+              
+            } catch (error) {
+              return res.clearCookie('_token').redirect('/auth/login')  //elimina el token que enga y redirecciona al login 
+              
+            }
+            
+
+            next() //next provicional
+            
+
+          }
+
+  41.4) eliminacion de campos en una consulta (lo que no quiero que se muestre en una consulta) 
+    n: se queire eliminar campo contraseña y _token cuando se hace diha consulta 
+    u: models/Usuario.js
+    s:
+      ...
+      hooks: {
+        ....
+      },
+      scopes: {
+        eliminarPassword: {
+          attributes: {
+            exclude: ['password', 'token', 'confirmado', 'createdAt', 'updatedAt'],
+          },
+        },
+      },
+   41.4.2) ahora puedo pasarle esto a la consulta:
+    u: middelware/protegerRuta.js
+    s:
+      //comprobar el token si es valido 
+        try {
+          ---         
+          //agrego entonces el scope: 
+          const usuario = await Usuario.scope('eliminarPassword').findByPk(decoded.id); //encuentro el usuario que se logueo
+          // almacenar ese usuario al req
+          if (usuario) {
+            req.usuario= usuario
+            
+          } else {
+            return res.redirect('auth/login')
+          }
+          return next(); //"reemplazo del next provional"
+
+        } catch (error) {
+          ---
+        }
+
+
+            //next() //next provicional, se quita y se pone en el "reemplazo del next provional"
+
 
  
    
@@ -3015,5 +3098,9 @@ Js, teoria importantes:
         lng,  //es como lng:lng  //forma normalB
         precioId, //aqui como ya se renombro "precio"  por "precioId" a esa propiedad destructurada que probiene del body, entonces ya la puedo pasar con el nombre, realmente aqui seria precioId: precioId pero como tienen el mismo nombre lo puedo hacer en una solo nombre
       });
+*) para los modelos en sequalize tengo los "hooks": que permiten agregar funcionces a un modelo de usuario
+*) los "scopes" son aquellos que permiten elimnar unos campos a una consulta especifica
 
-
+*) almacenar informacion en el "req":
+   ejemplo: 
+    req.usuario= usuario
