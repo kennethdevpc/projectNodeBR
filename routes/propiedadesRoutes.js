@@ -6,9 +6,9 @@ import protegerRuta from '../middelware/protegerRuta.js';
 const router = express.Router();
 
 router.get('/mis-propiedades', protegerRuta, admin);
-router.get('/propiedades/crear', crear);
+router.get('/propiedades/crear',protegerRuta, crear);
 router.post(
-  '/propiedades/crear',
+  '/propiedades/crear',protegerRuta,
   body('titulo').notEmpty().withMessage('Tittulo no puede ir vacio'),
   body('descripcion')
     .notEmpty()

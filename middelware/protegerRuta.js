@@ -19,7 +19,7 @@ const protegerRuta = async (req, res, next) => {
     } else {
       return res.redirect('auth/login')
     }
-    return next();
+    return next(); //regresa al siguiente middleware
 
     
   } catch (error) {
