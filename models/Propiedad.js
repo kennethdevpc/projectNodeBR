@@ -12,11 +12,11 @@ const Propiedad = db.define('propiedades', {
     type: DataTypes.STRING(100),
     allowNull: false,
   },
-  Descripcion: {
+  descripcion: {
     type: DataTypes.TEXT,
     allowNull: false,
   },
-  Habitaciones: {
+  habitaciones: {
     type: DataTypes.INTEGER,
     allowNull: false,
   },
@@ -42,7 +42,7 @@ const Propiedad = db.define('propiedades', {
   },
   imagen:{
     type: DataTypes.STRING,
-    allowNull:false
+    allowNull:true
   },
   publicado: {
     type: DataTypes.BOOLEAN,

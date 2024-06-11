@@ -44,7 +44,7 @@ const guardar = async (req, res) => {
   }
 
   //__________creando registro
-  console.log(req.body)
+  console.log(req.body);
   const {
     titulo,
     descripcion,
@@ -54,10 +54,11 @@ const guardar = async (req, res) => {
     calle,
     lat,
     lng,
-    precio: precioId,  //aqui no es un objeto slo que al hacer destructuring le doy el nombre de "precioId" a esa propiedad destructurada que probiene del body
-    categoria
-  } = req.body; //esto es el destructurin  
-
+    precio: precioId, //aqui no es un objeto slo que al hacer destructuring le doy el nombre de "precioId" a esa propiedad destructurada que probiene del body
+    categoria,
+  } = req.body; //esto es el destructurin
+  //leo el usuario logeado con el req.usuario y le cambio a el nombre "usuarioId"
+  const { id: usuarioId } = req.usuario;
   try {
     const propiedadGuardada = await Propiedad.create({
       titulo,
@@ -70,13 +71,16 @@ const guardar = async (req, res) => {
       lng,
       precioId, //aqui como ya se renombro "precio"  por "precioId" a esa propiedad destructurada que probiene del body, entonces ya la puedo pasar con el nombre, realmente aqui seria precioId: precioId pero como tienen el mismo nombre lo puedo hacer en una solo nombre
       categoriaId: categoria, //esta es la forma 2 en que le puedo pasar la informacion si viene el nombre de la variable diferente dese el front
+      usuarioId,
+      imagen:''
     });
+    //redireccionandome a la vista de eesa propiedad creada
+    const { id } = propiedadGuardada //selecciono el Id de esa rpopiedad
+    res.redirect( '/propiedades/agregar-imagen/{id}')
 
-    
+
   } catch (error) {
-    console.log(error)
-    
+    console.log(error);
   }
-
 };
 export { admin, crear, guardar };

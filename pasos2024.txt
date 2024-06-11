@@ -2024,11 +2024,11 @@ tailwindcss
         type: DataTypes.STRING(100),
         allowNull: false,
       },
-      Descripcion: {
+      descripcion: {
         type: DataTypes.TEXT,
         allowNull: false,
       },
-      Habitaciones: {
+      habitaciones: {
         type: DataTypes.INTEGER,
         allowNull: false,
       },
@@ -2779,6 +2779,36 @@ sintaxis: Estudiante.belongsToMany(Clase,{through:HorarioClase})
 
             //next() //next provicional, se quita y se pone en el "reemplazo del next provional"
 
+  41.5) leo las caracteristicas del usuario (usuario logueado) dese el req
+   y luego se la inserto a crear propiedad, al campo "usuarioId"
+      //leo el usuario logeado con el req.usuario y 
+      le cambio a el nombre "usuarioId", 
+      s:
+        const { id: usuarioId } = req.usuario;
+
+        try {
+          const propiedadGuardada = await Propiedad.create({
+            t.......
+            ..
+            .
+            usuarioId,    //agregado
+            imagen:''     //agregado
+        
+          });
+        } catch (error) {
+          console.log(error);
+        }
+   41.5.2)
+    me redirijo luego a otra vista para ello entonces
+    s:
+      //redireccionandome a la vista de eesa propiedad creada
+      const { id } = propiedadGuardada //selecciono el Id de esa rpopiedad
+      res.redirect( '/propiedades/agregar-imagen/{id}') 
+
+
+    n: ahora toca empezar a contruir esta vista 
+
+42) 
 
  
    
@@ -3101,6 +3131,6 @@ Js, teoria importantes:
 *) para los modelos en sequalize tengo los "hooks": que permiten agregar funcionces a un modelo de usuario
 *) los "scopes" son aquellos que permiten elimnar unos campos a una consulta especifica
 
-*) almacenar informacion en el "req":
+*) almacenar informacion en el "req": osea si despues tengo una funcion ya puedo usar (req,res)=>{}
    ejemplo: 
     req.usuario= usuario
