@@ -42,6 +42,8 @@ introduccion:
   - 41.3) ahroa para proteger la ruta con un token valido
   - 41.4) se coloca el scope en el modelo para poder eliminar algunas columnas de la consultas 
   - 41.5) leo las caracteristicas del usuario
+  - 42) Creando pagina pa agregar imagenes
+  
 
 
 

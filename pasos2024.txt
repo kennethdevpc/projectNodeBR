@@ -2783,6 +2783,7 @@ sintaxis: Estudiante.belongsToMany(Clase,{through:HorarioClase})
    y luego se la inserto a crear propiedad, al campo "usuarioId"
       //leo el usuario logeado con el req.usuario y 
       le cambio a el nombre "usuarioId", 
+      u: controllers/propiedadController.js
       s:
         const { id: usuarioId } = req.usuario;
 
@@ -2799,7 +2800,7 @@ sintaxis: Estudiante.belongsToMany(Clase,{through:HorarioClase})
           console.log(error);
         }
    41.5.2)
-    me redirijo luego a otra vista para ello entonces
+    hora tengo que crear el codigo que redirije luego a otra vista para ello entonces
     s:
       //redireccionandome a la vista de eesa propiedad creada
       const { id } = propiedadGuardada //selecciono el Id de esa rpopiedad
@@ -2808,7 +2809,134 @@ sintaxis: Estudiante.belongsToMany(Clase,{through:HorarioClase})
 
     n: ahora toca empezar a contruir esta vista 
 
-42) 
+42) Creando pagina pa agregar imagenes
+  u: routes/propiedadesRoutes.js
+  s: 
+    import { admin, crear, guardar, agregarImagen } from '../controllers/propiedadController.js';
+    router.get('/propiedades/agregar-imagen/:id', agregarImagen)
+
+  42.2)
+    moviendo el codigo para la barra, para hacer el codigo mas utilizable
+
+    42.2.2) creo un layout para que la barra que tenia el "views/layout/index.pug"
+      ahora pueda estar separada y por lo tanto ya no sera el index que se encarg de la barra
+      u: views/layout/admin.pug
+     42.2.2.2) muevo el archivo header a:
+      u: views/layout/includes/header.pug
+      n: renomobro ese archivo:
+      u: views/layout/includes/header-admin.pug
+      n: con el fin que quede separado mas el codigo
+    42.2.3) coloco ahora si en el codigo de 
+      U: views/layout/admin.pug
+      n: es el mismo codigo del views/layout/index.pug
+       solo que ahora esta en este archivo.
+
+      s: doctype html
+        html(lang="en")
+          head
+            meta(charset="UTF-8")
+            meta(http-equiv="X-UA-Compatible", content="IE=edge")
+            meta(name="viewport", content="width=device-width, initial-scale=1.0")
+            title Bienes raices | #{pagina}
+            link(rel="stylesheet", href="/css/app.css")
+            block styles
+
+          body.min-h-screen.bg-gray-50
+            //if barra            // lo elimino
+             include includes/header-admin  // agregado el archivo 
+
+            main(class="mx-auto container mt-10 px-2")
+              block contenido 
+
+            block scripts
+      n: se inlcluye el archivo aqui y se borra en el index:
+      u: views/layout/index.pug
+      s:   borro esto porque ya no es necesario  ya que ahora esta es en admin 
+         //- if barra
+         //-  include header
+    42.2.3) ahora como en el elemento que utiliza el layout que muestra la barra es:
+      U. views/propiedades/admin.pug
+      n: entonces tendre que cambiarle que ya no sea el "views/layout/index.pug" sino que sea el "views/layout/admin.pug"
+      s: //ahora ya no extinde desde:extends ../layout/admin
+        // sino que extiende desde
+          extends ../layout/admin
+
+     42.2.3.2)
+      Lo mismo con el resto de archivos:
+      u: views/propiedades/crear.pug
+      s: 
+        extends ../layout/admin
+
+
+      42.2.3.3) ahora ya puedo eliminar de las funciones
+       la variable de "barra":
+       u: controllers/propiedadController.js
+       s: 
+        const admin = (rew, res) => {
+          res.render('propiedades/admin', {
+            pagina: 'mis propiedades',
+            //barra: true, //Borro
+          });
+        };
+
+        const crear = async (req, res) => {
+          res.render('propiedades/crear', {
+            // barra: true,   //Borro
+            }
+
+        }
+        const guardar = async (req, res) => {
+            return res.render('propiedades/crear', {
+              pagina: 'Crear propiedad',
+              // barra: true,
+        }
+
+
+    42.2.3) 
+    u: controllers/propiedadController.js
+    s: 
+      const agregarImagen = async (req, res) => {
+        res.send('agregando imagen ') //solo para el ejemplo y comprobar que se llega hasta aqui
+        res.render('/propiedades/agregar-imagen', {
+        });
+      }
+      export { admin, crear, guardar };
+  42.3) ahora si creando la vista para agregar la imagen 
+    n: creo el archivo de imagen
+    u:  views/propiedades/agregar-imagen.pug
+    s: //copio lo mismo que tengo en "views/propiedades/crear.pug" y me baso en eso para hacer este formulario
+    s:
+      extends ../layout/admin
+      block styles
+      block contenido
+        div
+          h1.text-4xl.my-10.text-center.font-extrabold Bienes
+            sapan.font-normal Raices 
+          h2.text-center.text-2xl.font-extrabold #{pagina}
+        
+          div(class="bg-white shadow  py-8 px-4 rounded mx-auto my-10 max-w-4xl md:px-10 ")
+          form.space-y-2(method="POST" action="/propiedades/crear")
+            input(type="hidden" name="_csrf" value= csrfToken)
+          
+            input(class="w-full py-3 bg-indigo-600 hover:bd-indigo-700 rounde text-white font-bold uppercase cursor-pointer" 
+                  type="submit" value="Publicar propiedad" )
+        div.y-10
+      block scripts
+  42.4)
+      u: controllers/propiedadController.js
+      s:
+        const agregarImagen = async (req, res) => {
+            res.render('propiedades/agregar-imagen', {
+              pagina:"Agregar imagen"
+            });
+            
+        }
+ 
+
+
+
+
+
 
  
    
@@ -3134,3 +3262,8 @@ Js, teoria importantes:
 *) almacenar informacion en el "req": osea si despues tengo una funcion ya puedo usar (req,res)=>{}
    ejemplo: 
     req.usuario= usuario
+
+*)  res.send('agregando imagen ')
+*) res.render('iniciaSin/aLaDireccion')
+*) res.redirect( '/iniciaconbarra/agregar-imagen/{id}')
+

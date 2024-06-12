@@ -1,6 +1,6 @@
 import express from 'express';
 import { body } from 'express-validator'
-import { admin, crear, guardar } from '../controllers/propiedadController.js';
+import { admin, crear, guardar, agregarImagen } from '../controllers/propiedadController.js';
 import protegerRuta from '../middelware/protegerRuta.js';
 
 const router = express.Router();
@@ -25,5 +25,6 @@ router.post(
 
   guardar
 );
+router.get('/propiedades/agregar-imagen/:id', agregarImagen) 
 
 export default router;
