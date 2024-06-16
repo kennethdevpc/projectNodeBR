@@ -2849,11 +2849,12 @@ sintaxis: Estudiante.belongsToMany(Clase,{through:HorarioClase})
               block contenido 
 
             block scripts
-      n: se inlcluye el archivo aqui y se borra en el index:
-      u: views/layout/index.pug
-      s:   borro esto porque ya no es necesario  ya que ahora esta es en admin 
-         //- if barra
-         //-  include header
+      42.2.3.2)
+        n: se inlcluye el archivo aqui y se borra en el index:
+        u: views/layout/index.pug
+        s:   borro esto porque ya no es necesario  ya que ahora esta es en admin 
+          //- if barra
+          //-  include header
     42.2.3) ahora como en el elemento que utiliza el layout que muestra la barra es:
       U. views/propiedades/admin.pug
       n: entonces tendre que cambiarle que ya no sea el "views/layout/index.pug" sino que sea el "views/layout/admin.pug"
@@ -2906,7 +2907,7 @@ sintaxis: Estudiante.belongsToMany(Clase,{through:HorarioClase})
     u:  views/propiedades/agregar-imagen.pug
     s: //copio lo mismo que tengo en "views/propiedades/crear.pug" y me baso en eso para hacer este formulario
     s:
-      extends ../layout/admin
+      extends ../layout/admin   //esto se cambio ahor extiende desde admin
       block styles
       block contenido
         div
@@ -2931,6 +2932,56 @@ sintaxis: Estudiante.belongsToMany(Clase,{through:HorarioClase})
             });
             
         }
+43) añadiendo dropzone que sirve pa agregar archivos 
+  c:
+    npm i dropzone@5.9.3
+  43.1) creo el archivo sonde se va  aagregar la dependencia de dropzone: 
+    u: src/js/agregarimagen.js
+  43.2) voy al webpack y lo agrego 
+  
+    U: webpack.config.js
+    s:
+      entry: {
+        ...
+        agregarImagen: './src/js/agregarimagen.js',  //agregado 
+      },
+   43.2.2) ejecuto el comando nuevamente osea para y ejecuo nuevamente
+    c: npm run dev
+
+  43.3) 
+    u: src/js/agregarimagen.js
+    s:
+      import {Dropzone} from 'dropzone'
+
+  43.4) 
+    u: views/propiedades/agregar-imagen.pug
+    s: 
+        block scripts
+         script(src="/js/agregarImagen.js")
+  43.5) agregando el dropzone al formulario
+    u: views/propiedades/agregar-imagen.pug
+    s: 
+     form(class="dropzone border-dashed border-2 w-full min:h-96 h-auto rounded flex-col justify-center item-center" method="POST" action="/propiedades/crear")
+        input(type=".....
+        input(class="mt-5 ...." ) //le agrego el mt-5
+
+
+    43.5.2) aregando los estilos de dropzone:
+      urL: https://gist.github.com/codigoconjuan/fc549f7f12c1e0baaf684cd4d08342c7
+      u: views/propiedades/agregar-imagen.pug
+      s:  
+        block styles
+          link(rel="stylesheet", href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.3/dropzone.css")
+    43.5.3)  ahora cambio el orden del estilo, opara que tome los estilos de tailwind ya que no los esta tomando 
+      U: views/layout/admin.pug
+      s: 
+        block styles  //primero
+        link(rel="stylesheet", href="/css/app.css") // va de segundo
+
+
+
+
+
  
 
 

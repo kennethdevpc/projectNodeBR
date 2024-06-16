@@ -43,6 +43,7 @@ introduccion:
   - 41.4) se coloca el scope en el modelo para poder eliminar algunas columnas de la consultas 
   - 41.5) leo las caracteristicas del usuario
   - 42) Creando pagina pa agregar imagenes
+  - 43) añadiendo dropzone
   
 
 

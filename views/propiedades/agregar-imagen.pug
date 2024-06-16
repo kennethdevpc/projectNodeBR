@@ -1,6 +1,8 @@
 extends ../layout/admin
 
 block styles
+  link(rel="stylesheet", href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.3/dropzone.css")
+
     
 block contenido
   div
@@ -9,15 +11,16 @@ block contenido
     h2.text-center.text-2xl.font-extrabold #{pagina}
    
     div(class="bg-white shadow  py-8 px-4 rounded mx-auto my-10 max-w-4xl md:px-10 ")
-     form.space-y-2(method="POST" action="/propiedades/crear")
+     form(class="dropzone border-dashed border-2 w-full min:h-96 h-auto rounded flex-col justify-center item-center" method="POST" action="/propiedades/crear")
       input(type="hidden" name="_csrf" value= csrfToken)
-    
-      input(class="w-full py-3 bg-indigo-600 hover:bd-indigo-700 rounde text-white font-bold uppercase cursor-pointer" 
+      input(class="mt-5 w-full py-3 bg-indigo-600 hover:bd-indigo-700 rounde text-white font-bold uppercase cursor-pointer" 
             type="submit" value="Publicar propiedad" )
+      
 
 
 
   div.y-10
 block scripts
+  script(src="/js/agregarImagen.js")
  
 
