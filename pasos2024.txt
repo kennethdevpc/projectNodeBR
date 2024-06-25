@@ -2977,7 +2977,52 @@ sintaxis: Estudiante.belongsToMany(Clase,{through:HorarioClase})
       s: 
         block styles  //primero
         link(rel="stylesheet", href="/css/app.css") // va de segundo
+44) Validando antes de mostrar o agregar que el usuario corresponda
+  primero verifico las vlaidaciones 
+  u: controllers/propiedadController.js
+  s:
+    const agregarImagen = async (req, res) => {
 
+
+      //validar que propiedad exista
+      const propiedad = await Propiedad.findByPk(id)
+      if (!propiedad) {
+        return res.redirect('/mis-propiedades')
+      }
+
+      //validar que propiedad no este publicada
+      if (propiedad.publicado) {
+        return res.redirect('/mis-propiedades');
+      }
+
+      //validar que propiedad pertenece a quein visita la pafgina
+        console.log(req.usuario.id.toString)  
+        console.log( propiedad.usuarioId.toString)
+        if (req.usuario.id.toString() !== propiedad.usuarioId.toString()) {
+          return res.redirect('/mis-propiedades');
+        }
+
+
+
+    }
+    44.0.2) ojo es recoemndado que al leer datos de id se pasen a string 
+    ya que a veces va a dar problemas si no tienen el mismo tyopo de dato 
+
+          console.log(typeof( req.usuario.id.toString()))
+          console.log(propiedad.usuarioId.toString());
+
+
+    44.1) ojo para que el middleware de proteccion de rutas y que pone al usuario en el "req": request:
+     debo usar el middelware.
+     u: routes/propiedadesRoutes.js
+     s:
+      router.get('/propiedades/agregar-imagen/:id', protegerRuta, agregarImagen); 
+
+
+
+
+
+  /validar que propiedad exista
 
 
 

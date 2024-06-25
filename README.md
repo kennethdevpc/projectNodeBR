@@ -44,6 +44,7 @@ introduccion:
   - 41.5) leo las caracteristicas del usuario
   - 42) Creando pagina pa agregar imagenes
   - 43) añadiendo dropzone
+  - 44) Validando antes de mostrar o agregar que el usuario corresponda
   
 
 
