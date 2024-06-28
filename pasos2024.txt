@@ -3124,7 +3124,15 @@ sintaxis: Estudiante.belongsToMany(Clase,{through:HorarioClase})
           }
         }
 
-    
+46) Ahora si se coloca el metodo post en la ruta  
+  u: routes/propiedadesRoutes.js
+  s:
+    router.post('/propiedades/agregar-imagen/:id',  (req,res) => {
+      console.log('Subiendo imagen')
+    }); 
+
+
+47) 
         
 
 

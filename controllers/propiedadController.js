@@ -93,7 +93,6 @@ const agregarImagen = async (req, res) => {
   if (!propiedad) {
     return res.redirect('/mis-propiedades')
   }
-  console.log("laaaaaaaa",propiedad);
 
   //validar que propiedad no este publicada
   if (propiedad.publicado) {
@@ -101,8 +100,6 @@ const agregarImagen = async (req, res) => {
   }
 
   //validar que propiedad pertenece a quein visita la pagina
-  console.log(typeof( req.usuario.id.toString()))
-  console.log(propiedad.usuarioId.toString());
   if (req.usuario.id.toString() !== propiedad.usuarioId.toString()) {
     return res.redirect('/mis-propiedades');
   }
