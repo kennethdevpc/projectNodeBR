@@ -3023,21 +3023,109 @@ sintaxis: Estudiante.belongsToMany(Clase,{through:HorarioClase})
 
 
   /validar que propiedad exista
+45) configurnado dropzone:
+  u: views/propiedades/agregar-imagen.pug
+  s://le agrego el ID a el formulario
+    form(id="imagen" class="dropzone border-dashed border-2 w-full min:h-96 h-auto rounded flex-col justify-center item-center" method="POST" action="/propiedades/crear")
+        input(type="hidden" name="_csrf" value= csrfToken)
+  45.1) 
+    n: lo que configure en el archivo Js afecta a la clase Dropzone(html) 
+    u: src/js/agregarimagen.js
+    s: 
+      import { Dropzone } from 'dropzone'
+      Dropzone.options.imagen = {
+        dictDefaultMessage: 'Sube tus imagenes aqui', //mensaje en el box
+        acceptedFiles: '.png, .jpg, .jpeg', //para determinar el tipo de archivo
+        maxFilesize: 5, //tamaño de el archivo maximo permitido
+        maxFiles: 1, //cantidad de archivos que permite cargar
+        parallelUploads: 1, //debe ser los mismos que maxfiles
+        autoProcessQueue: false, //es el enable para subir, si esta en false hasta que no lo ponga en tru no se sube 
+                                //si esta en true lo que hace es apenas arrastre la imagen o el archivo lo intneta subir
+                                //pero como falta le toquen pues marca el error CSRF toquen 
+        addRemoveLinks: true, //habilita enlace para eliminar el archivo si ya se subi
+        dictRemoveFile: 'Borrar archivo', //cambia el texto de eliminar archivo
+        dictMaxFilesExceeded:'El limite es 1 archivo '//cambia el texto del mensaje de error cuando no se pueden subir mas archivos
+        
+      }
 
-
-
-
+  45.2) ahora su va al navegarodr y 
+    url: http://localhost:3200/propiedades/agregar-imagen/0058c913-ef4f-43f5-a95a-21a2ebcfeb50
  
 
 
+  45.3) le mando desde el controles la propiedad:
+    u:controllers/propiedadController.js
+    s:
+      const agregarImagen = async (req, res) => {
+        ...
+
+         res.render('propiedades/agregar-imagen', {
+          pagina: `Agregar imagen: ${propiedad.titulo}`, //Agregado....
+          propiedad   //agregado------
+        });
 
 
-
-
- 
+      }
+  45.4) le agrego al formulacion la nueva ruta : action=`/propiedades/agregar-imagen/${id}`
+    u: views/propiedades/agregar-imagen.pug
+    s: 
+      form(id="imagen" class="dropzone border-dashed border-2 w-full min:h-96 h-auto rounded flex-col justify-center item-center" 
+        method="POST" action=`/propiedades/agregar-imagen/${propiedad.id}`)
    
-    
+    n: si voy al navegador y le doy inspeciionar:
+    url:
+    s:  
+      <form class="dropzone" id="imagen"
+      method="POST" action="/propiedades/agregar-imagen/0058c913-ef4f-43f5-a95a-21a2ebcfeb50">
 
+  45.5) quitnato el error de csrf toquen 
+    U: controllers/propiedadController.js
+    s:
+        const agregarImagen = async (req, res) => {
+          res.render('propiedades/agregar-imagen', {
+          pagina: `Agregar imagen: ${propiedad.titulo}`,
+          propiedad,
+          csrfToken: req.csrfToken(),  //agregado
+    });
+
+    45.5.2) 
+      u: views/propiedades/agregar-imagen.pug
+      s: 
+        form(id="imagen" class="dropzone border-dashed border-2 w-full min:h-96 h-auto rounded flex-col justify-center item-center" 
+          method="POST" action=`/propiedades/agregar-imagen/${propiedad.id}`)
+          input(type="hidden" name="_csrf" value= csrfToken) //-----aqui erecibe el csrf token
+ 
+      45.5.2.2) tambien agregar en el header el csrftoken
+        u: views/propiedades/agregar-imagen.pug
+        s: 
+          block styles
+            link(rel="stylesheet", href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.3/dropzone.css")
+            meta(name='csrf-token' content=csrfToken)  //------agregado
+
+
+        y en le URL ya se va poder ver:
+        :http://localhost:3200/propiedades/agregar-imagen/7a514330-bc3a-4b8d-bb25-432d2663f4a5
+        elements: 
+          <meta name="csrf-token" content="tsdPaB2Y-d7rR27wp5ZZAbkWEY3DiXxoE53s">
+    45.5.3)ahora si para importarlo al codigo de DROPZONE:
+      u: src/js/agregarimagen.js
+      s:
+        //forma 1 de obtener el dato de meta osea ese token:
+        const token = document.querySelector('meta[name="csrf-token"]').content;
+        //forma 2  ----------agregado
+        const token =  document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+        
+        ....
+        ..
+        .//----------agregado
+          headers: {
+            'CSRF-Token':token
+
+          }
+        }
+
+    
+        
 
 
 
