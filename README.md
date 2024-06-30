@@ -47,7 +47,7 @@ introduccion:
   - 44) Validando antes de mostrar o agregar que el usuario corresponda
   - 45) config dropzone
   - 46) Ahora si se coloca el metodo post en la ruta  
-
+  - 47) Agregando Multer (para poder leer archivos en formulario)
   
   
 

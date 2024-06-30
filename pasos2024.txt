@@ -3130,11 +3130,94 @@ sintaxis: Estudiante.belongsToMany(Clase,{through:HorarioClase})
     router.post('/propiedades/agregar-imagen/:id',  (req,res) => {
       console.log('Subiendo imagen')
     }); 
+47) Agregando Multer (para poder leer archivos en formulario)
+  n: esto lo que hace es que al igual que en, u: index.js
+      //habilitar lectura de datos de formularios-------
+    app.use(express.urlencoded({ extended: true }));
+
+  n: esto permitia que al dar post, se guarden , sring, numerico pero no permitia archivos, 
+  entonces multer si deja subir archivos
+
+  47.2) INstalacion:
+    c: npm i multer
+  47.3) haciendo el uso a tra veze de un middelware
+    u: middelware/subirImagen.js
+
+    s:
+      import multer from 'multer';
+      import path from 'path'  //algo interno de node para navegar en carpetas
+      import {generarId} from '../helpers/token.js'
+      const storage = multer.diskStorage({
+        //file: es el archivo que se esta subiendo
+        destination: function (req, file, cb) {
+          //error, detination
+          cb(null, './public/uploads/'); //si se llama significa que se subio correctamente la imagen
+        },
+        //es para definir el nombre el cb es un callback propio que se ejcuta cuando se utiliza el multer.diskStorage
+        filename: function (req, file, cb){
+          //path.extname(file.originalname)); me retorna solo la extension 
+          cb(null, generarId() + path.extname(file.originalname));
+        },
+      });
+
+      const upload = multer({ storage }) //aqui cuando se utilice este middelware pero con la configuracion que le estemos pasando "storage"
+
+      export default upload
+
+   47.3.2) ahora tengo que poner el middleware en la ruta 
+    u:routes/propiedadesRoutes.js
+    s: import upload from '../middelware/subirImagen.js'
+
+   tengo que hacer que haya una conexion entre Dropzone
+    U: routes/propiedadesRoutes.js
+    s: 
+      router.post('/propiedades/agregar-imagen/:id',  (req,res) => {
+        //upload.array() //para multiples imagenes
+        upload.single()  //.----------agregado
+        console.log('Subiendo imagen')
+      }); 
+
+   47.3.3)
+    n: tengo que tener algo que permita conectar lo del servidor( lo que esta en google)
+    y que se pueda conectar en el archivo javascript
+    Entonces en dropzone:
+    u:src/js/agregarimagen.js
+    s:
+      ....
+       headers: {
+        'CSRF-Token':token
+      },
+      //agregado
+      paramName: 'imagen'  //tiene que tener el mismo nombre de loq ue se esta uzando en la ruta
+      
+    }
+    47.3.3.2) 
+      u: routes/propiedadesRoutes.js
+      router.post(....
+        ...
+        //el mismon nombre "imagen" 
+        upload.single('imagen')  //-------modificado 
+        console.log('Subiendo imagen')
+      }); 
+    47.3.3.3) 
+        N: como no uso el req ni el res puedo dejar solo el middleware:
+        s:
+          router.post('/propiedades/agregar-imagen/:id',upload.single('imagen')); 
+    
+    47.3.3.4) ojo sii queiro simular o verificar que si siube debo:
+    en la ubicacion de  
+      u: src/js/agregarimagen.js
+      s: ponerlo en true
+        autoProcessQueue: true, //es el enable para subir, s esta en false ahasta que no lo ponga en tru no se sube 
+
+      n: luego en esta ubicaion a se abra subido la imagen 
+      u: public/uploads
 
 
-47) 
-        
 
+
+
+   
 
 
 

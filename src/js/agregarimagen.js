@@ -14,5 +14,7 @@ Dropzone.options.imagen = {
   headers: {
     'CSRF-Token':token
 
-  }
+  },
+  paramName: 'imagen'  //tiene que tener el mismo nombre de loq ue se esta uzando en la ruta
+  
 }
