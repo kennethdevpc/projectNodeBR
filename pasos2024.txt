@@ -181,7 +181,7 @@ npm run css
 
 
 
-    n: si quiero ver(mostrar, recibir, enviada, pasar) la info que se envia
+    n: si quiero ver(mostrar, recibir, enviada, pasar, enviar) la info que se envia
     desde controlador
       s:	html
         h1=autenticado
@@ -1672,7 +1672,7 @@ tailwindcss
 		  });
 		};
 		//fiormlario para crear propiedad
-		const crear = (rew, res) => {
+		const crear = (req, res) => {
 		  res.render('propiedades/crear', {
 		    pagina: 'Crear propiedad',
 		    barra: true,
@@ -1965,6 +1965,1297 @@ tailwindcss
 
         });
 
+  32.6) preparando la informacion del mapa para la base de datos
+  U: views/propiedades/crear.pug
+  s:  ...
+      .
+      h3.text-lg.leading-10.font-medium.text-gray-900 IUbicacion
+        p.text-gray-600 Ubicacion de la propiedead en el mapa
+        #mapa.w-xl.h-96
+
+        div 
+          p.calle //esta es la clase "calle"
+          input(type="hidden" name="calle" id="calle")
+          input(type="hidden" name="lat" id="lat")
+          input(type="hidden" name="lng" id="lng")
+  N : etonces para llenar el "P" en el front que esta vacio inicialmente, pues se 
+  hace en el codigo del mapa el llamado de la calle y se muestra posterior en ese campo
+  u:  src/js/mapa.js
+  s:
+    //llenar los campos
+      document.querySelector('.calle').textContent = resultado.address.Address ?? '';
+
+  n para que se guarde en la base de datos debo agregar eso al input calle:
+  s:
+      document.querySelector('#calle').value = resultado?.address?.Address ?? '';
+
+  n: al inspeccionar y ubicr el puntero me mostrara algo como esto :
+  <input type="hidden" name="lat" id="lat" value="20.675542997511">
+
+
+33) Creando los modelos de propiedad
+  u: models/Propiedad.js
+  u: models/Categoria.js
+  u: models/Precio.js
+
+  33.0) agrego al crear
+  u: views/propiedades/crear.pug
+  s: div
+         label.block.text-md.uppercase.text-gray-500.mb-3.py-3.font-bold(for="descripcion") Descripcion
+         textarea#descripcion.w-full.px-3.py-3.border.border-gray-300.rounded-xl.placeholder-green-400(placeholder="Descripcion" name="descripcion")
+
+  n: tamien lo podria hacer de la forma2: usando clases
+          label(class="block text-sm uppercase text-gray-500 mb-3 font-bold" for="descripcion") Descripcion
+
+  33.1) agrego campos a el modelo propiedad:
+  u: models/Propiedad.js
+  s: import { DataTypes } from 'sequelize';
+  
+    import db from '../config/db.js';
+
+    const Propiedad = db.define('propiedades', {
+      id: {
+        type: DataTypes.UUID,
+        defaultValue: DataTypes.UUIDV4,
+        allowNull: false,
+        primaryKey: true,
+      },
+      titulo: {
+        type: DataTypes.STRING(100),
+        allowNull: false,
+      },
+      descripcion: {
+        type: DataTypes.TEXT,
+        allowNull: false,
+      },
+      habitaciones: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+      },
+      estacionamiento: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+      },
+      wc: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+      },
+      calle: {
+        type: DataTypes.STRING(60),
+        allowNull: false,
+      },
+      lat: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      lng: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      imagen:{
+        type: DataTypes.STRING,
+        allowNull:false
+      },
+      publicado: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: false
+      }
+    });
+
+    export default Propiedad;
+
+34) creando modelo de precio y categoria
+  u: models/Categoria.js
+  s:
+    import { DataTypes } from 'sequelize';
+    import db from '../config/db.js';
+    const Categoria = db.define('categorias', {
+      nombre: {
+        type: DataTypes.STRING(30),
+        allowNull: false,
+      }
+    });
+    export default Categoria;
+
+  u: models/Precio.js
+  s:
+      import { DataTypes } from 'sequelize';
+    import db from '../config/db.js';
+
+    const Precio = db.define('precios', {
+      
+      nombre: {
+        type: DataTypes.STRING(30),
+        allowNull: false,
+      },
+    });
+
+    export default Precio;
+    34.1) nota super importante:
+    la table de los modelos solo se crea cuando se hacen post 
+    es decir inicialmente no se crea la tabl solo hhaste
+    que se haga un post o se queira llenar la tabla, por eso mejor se creara un seeder
+    para precio y para categoria
+
+35) creo el seeder:
+  u: seed/seeder.js
+  35.1) creo el seeder de los modelos
+  u:seed/categorias.js
+  s: 
+    const categorias = [
+      {nombre:'Casa'},
+      {nombre:'Departamento'},
+      {nombre:'Bodega'},
+      {nombre:'Terreno'},
+      {nombre:'Cabaña'},
+    ]
+    export default categorias;
+  35.2) llamo a ese seed de cartegorias al seeder principal:
+  u: seed/seeder.js
+  n: exit(1) es error
+     exit() es que termina el proceso pero sin error
+  n: el uso del Exit (se salie inmediatamente despues de algun error) 
+   puede ser de 2 formas:
+
+    forma1: no importo nada lo uso directo
+    const importarDatos = async () => {
+        try {
+          
+        } catch (error) {
+          console.log(error);
+          process.exit(1); //forma1 termina el proceso inmediatamente
+        }
+      }
+    forma2:
+      s:
+        import {exit} from 'node:process' //forma 2 de uso de exit
+        const importarDatos = async () => {
+          try {
+          } catch (error) {
+            exit(1); //forma 2 de uso de exit
+          }
+        }
+
+  s:
+      // import {exit} from 'node:process' //forma 2 de uso de exit
+    import categorias from "./categorias.js"; //puedo importarlo con un nombre cualqueira ya que es un export default
+    import Categoria from '../models/Categoria.js';
+    import db from "../config/db.js";
+
+    const importarDatos = async () => {
+      try {
+        //autenticar
+        await db.authenticate()
+
+        //Generar las columbas
+        await db.sync()
+
+        //Insertamos los datos
+        await Categoria.bulkCreate(categorias)  //le paso al modelo esas categorias creadas en el arreglo de objeto 
+        console.log("Datos Importados correctamente")
+        
+      } catch (error) {
+        console.log(error);
+        process.exit(1); //termina el proceso inmediatamente
+        // exit(1); //forma 2 de uso de exit
+      }
+    }
+
+  35.3) Ejecucion del seeder 
+    35.3.1) 
+      n: el seeder se ejecuta desde un script del package.json
+      u: package.json
+      s:
+        "scripts": {
+          ..
+          .,
+            "db:importar": "node ./seed/seeder.js -i"
+        }
+
+    35.3.2) 
+    n: cuando se llama un script del package.json 
+    ese forma entonces parte del process
+    es un proceso de Node.js  por lo tanto se pueden leer sus argumetos
+
+    u: seed/seeder.js
+    n:
+      /*
+      process: es un proceso intero de node
+      argv: es algo inerno de node.es una forma en que le paso argunmentos
+      a un COMANDO desde la terminal y esos argumentos los va leer como un arreglo
+      ejm: [arg1,arg2,arg3], entoncs aqui esta lellendo la posicion2
+      [2] y lo que le mando desde el package
+
+      entonces lo que le mando: desde package.json
+      "node ./seed/seeder.js -i"
+      me dice que cuando ejecute ese comando en la terminal ( "db:importar")
+      entonces va a leer " -i" que es el argumento en la posicion 2
+      y si es igual entoces llama la funcion importarDatos();
+      */
+    s: 
+     if (process.argv [2] === "-i") { 
+      importarDatos()
+     }
+
+   35.3.3) 
+   voy a la terminal y ejecuto 👍
+   c:
+      npm run db:importar
+   n: si todo salio bien deberia mostrar en la termianal el soncole.log:
+   
+    msj: Datos Importados correctamente
+
+     n: y ya deberia aparecer la tabla en el a base de datos.
+  35.4) creo el seeder para precios
+    U:seed/precios.js
+    s:
+      const precios = [
+        {        nombre: '0 - $10,000 USD',
+        },
+        {        nombre: '$10,000 - $30,000 USD',
+        },
+        
+      ];
+
+      export default precios;
+    
+    n: despues debo de lalmarlo en :
+    u: seed/seeder.js
+    s:
+      import precios from './precios.js';
+      import Precio from '../models/Precio.js';
+      await Precio.bulkCreate(precios)  //le paso al modelo esas categorias creadas en el arreglo de objeto 
+  35.5) promise all
+  u:seed/seeder.js
+  s: 
+    const a=  Categoria.bulkCreate(categorias)  //le paso al modelo esas categorias creadas en el arreglo de objeto 
+    const b=  Precio.bulkCreate(precios)  //le paso al modelo esas categorias creadas en el arreglo de objeto 
+    await Promise.all([a,b])
+
+  35.5)teoria sobre promise.all
+  n si yo quiero que todas las promesas se terminen de ejectuatr y luego despues de esos terminar el proceso 
+  pues lo hago asi y para este ejemplo no se esta asignando a nada 
+
+  s:  await Promise.all([a,b])
+
+  n: pero si queiro asignar esos resultados:
+  s:
+    const [aresult,bresult] = await Promise.all([a,b])
+
+36) eliminar datos de la tabla de la base datos con el seeder:
+  u: seed/seeder.js
+  n: el truncate lo que hace es que reinicia los ID desde el Numero 1 
+  ya que si no se hace el truncate si tenia 10 registros y los elimna 
+  empieza desde el ultimo ID osea ID=10
+  n: where: {}  Lo que hace es limpiar todas las categorias
+
+  s:
+    const eliminarDatos = async () => {
+      try {
+        await Promise.all([
+          Categoria.destroy({ where: {}, truncate: true }),
+          Precio.destroy({ where: {}, truncate: true }),
+        ]);
+        console.log("Datos eliinados correctamente")
+        process.exit();
+        
+      } catch (error) {
+        console.log(error);
+        process.exit(1);
+        
+      }
+    }
+
+  36.2) coloco el process que me llamara esa fucnion:
+    u: seed/seeder.js
+    s:
+    if (process.argv[2] === "-e") {   
+      eliminarDatos();
+
+    }
+    36.2.2)
+    u: package.json
+    s:
+     "scripts": {
+      "db:eliminar": "node ./seed/seeder.js -e"
+     }
+
+    n: ejecuto el comando para que se eliminarDatos entonces:
+    voy a la terminal y ejecuto 👍
+    c:
+      npm run db:eliminar
+
+    36.2.3) forma 2 de eliminar datos
+    s:
+        const eliminarDatos = async () => {
+        try {
+          .....
+
+          // Forma2 de eliminar datos de la base de datos
+          await db.sync({ force: true });
+
+          console.log('Datos eliinados correctamente');
+          process.exit();
+            } catch (error) {
+              console.log(error);
+              process.exit(1);
+              
+            }
+        }
+
+37) poniendo los datos de precio y categoria en el formulario
+    u: controllers/propiedadController.js
+    s:
+
+      import Precio from '../models/Precio.js'
+      import Categoria from '../models/Categoria.js'
+      ...
+      ..
+      .
+      const crear = async (req, res) => {
+
+      //consultar modelo de precios y categorias
+      const [categorias, precios] = await Promise.all([
+        Categoria.findAll(),
+        Precio.findAll();
+        
+      ])
+        res.render('propiedades/crear', {
+        pagina: 'Crear propiedad',
+        barra: true,
+        categorias,     //aqui le paso el la consulta de la DB
+        precios         //aqui le paso el la consulta de la DB
+      });
+    };
+
+    37.1) hora para mostrarlo tengo que interar 
+
+      U: views/propiedades/crear.pug
+      s:
+        select#categoria.w-full.px-3.py-3.border.border-gray-300.rounded-xl.placeholder-green-400( name="categoria")
+             option(value="") -seleccione-
+              each categoria in categorias    //agregado
+                option(value=categoria.id)=categoria.nombre  //agregado
+    
+
+38) relaciones:
+Asociaciones:
+Sequalize soporta todo tipo de relaciones:
+1:1
+1:N
+N:N
+
+Metodos:
+hasOne: reclacion 1:1, 1 registro solo puede tener 1 registro asociado de otra tabla
+ejmplo:  Propiedad tiene una Vendedor 
+sintaxis: Vendedor.hasOne(Propiedad)  /7 parece que mas bien se lee de derecha a izquierda
+nota: en este ejmplo propiedad deber'a tener una llave foranea que hga referencia a 1 vendedor
+si no se espeifica sequalize genera una
+
+belongsTo: reclacion 1:1, 1 registro solo puede tener 1 registro asociado de otra tabla
+sintaxis: Propiedad.belongsTo(Vendedor), pertenece
+nota: en este ejmplo propiedad deber'a tener una llave foranea que hga referencia a 1 vendedor
+si no se espeifica sequalize genera una
+
+la unica diferrencia entre belongs y hasone es la sinstaxis
+
+
+hasMany: reclacion 1:N, 1 registro  puede tener multiples registro asociados de otra tabla
+ejemplo: un Vendedor tiene multiples Propiedades, un Usuario tiene multiples Posts
+Sintaxis: 
+	Vendedor.hasMany(Propiedad)
+	Propiedad.belongsTo(Vendedor)
+	
+	
+Nota: en este ejemplo propiedad deberia tener una llave foranea que haga referencia a1 vendedor
+si no se espeifica sequalize genera una
+
+
+belongsToMany: reclacion N:N, 1 registro  puede tener multiples registro asociados de otra tabla y viceversa
+se utiliza una tabla pivote
+
+sintaxis: Estudiante.belongsToMany(Clase,{through:HorarioClase})  
+
+|38.1) Ejemplo belongsTo
+  para crear las relaciones en este tutorial se sugiere
+  crear un archivo que llame los modelos y luego que haga las relaciones
+  u: models/index.js  //creo este archivo
+  s:
+    import Propiedad from './Propiedad.js'
+    import Precio from './Precio.js'
+    import Categoria from './Categoria.js'
+    import Usuario from './Usuario.js'
+
+    Precio.hasOne(Propiedad); //foreignKey por defecto
+    Precio.hasOne(Propiedad,{foreignKey:"llaveforaceadeprecio"}); //si queiro cambiarle el nombre por defetcto de la foreignKey
+    //la forma 2 sera con belongs pero en ambas la llaveforanea estara en Propiedades
+    Propiedad.belongsTo(Precio)
+    Propiedad.belongsTo(Precio, { foreignKey: 'llaveforaceadeprecioconbelongs' });
+    
+
+    export {  
+      Propiedad,
+      Precio,
+      Categoria,
+      Usuario
+    }
+
+   38.1.2) 
+   si 
+  38.2) En esta parte toca mencionar que con las relaciones ahora los 
+  elementos que llaman a los modelos ya tendria que llamar desde este archivo 
+  al correspondiente modelo que ya tiene la relacion tambien 
+  
+  n: entonces en los seeder que llamaba los modelos ahora los llama 
+  de tal manera que ya tenga la relacion:
+
+  s:
+    // import Categoria from '../models/Categoria.js';  //se quitan ya qeu ahora se llama desde donde tiene las relaciones
+    // import Precio from '../models/Precio.js';    //esto tiene solo el modelo
+    import {Categoria, Precio} from '../models/index.js' //esto tiene el modelo y las relaciones
+
+  38.3) despues de haber creado el archivo de las reclaciones entonces ahora puedeo crear las relaciones:
+  u: models/index.js
+  s:
+      Propiedad.belongsTo(Precio, { foreignKey: 'precioId' });
+      Propiedad.belongsTo(Categoria, { foreignKey: 'categoriaId' });
+      Propiedad.belongsTo(Usuario, { foreignKey: 'usuarioId' });
+
+39) añadiendo CSRF y validacion al formulario
+  u: routes/propiedadesRoutes.js
+  n: le agrgo ala route la funcion y la ruta de post
+  s:
+    import { admin, crear, guardar } from '../controllers/propiedadController.js';
+    router.post('/propiedades/crear', guardar);
+
+
+  39.1)  creo el cortrolador 
+  U: controllers/propiedadController.js
+  s: 
+    const guardar = (req,res) => {}
+  
+  39.2) añadiendo validacion desde el routing y no desde el controller
+  u: routes/propiedadesRoutes.js
+  n: se importa el body, ya que ahora se hace es desde el routing
+  s:
+    import { body } from 'express-validator' //Este a diferencia del controller que llamaba 
+    
+    router.post('/propiedades/crear',
+    body('titulo').notEmpty().withMessage('Tittulo no puede ir vacio'),
+    guardar);
+
+  n: //en el cotnroler importaba antes:check, validationResult, ahora solo llama al body
+      //pero el validationResult si lo llama en el controlador para mostrar los mensajes
+    import { check, validationResult } from 'express-validator'
+
+   39.2.2)
+    n: algo interesante es que aqui no hay necesidad de utilizar en async await, ni el run al final
+    ejm: 
+      await check('nombre').notEmpty().withMessage('Nombre no puede ir vacio ').run(req);
+
+  39.3) como muestro ahora entonces los mensajes de error:
+   u: controllers/propiedadController.js
+   s: 
+    import { validationResult } from 'express-validator';
+    const guardar = async (req, res) => {
+      //validacion
+      let resultado = validationResult(req);
+    
+
+      //__________comprobando si el formlario es vacio
+      if (!resultado.isEmpty()) {
+        //consultar modelo de precios y categorias
+          const [categorias, precios] = await Promise.all([Categoria.findAll(), Precio.findAll()]);
+
+        return res.render('propiedades/crear', {
+          pagina: 'Crear propiedad',
+          barra: true,
+          csrfToken: req.csrfToken(), //este se coloca porque cuando si quiere reenviar oravez el formulario pues ya no tiene toquen y pues entonces necesia este token 
+          categorias,
+          precios,
+          errores: resultado.array(),
+        });
+      }
+    };
+
+
+
+  39.4) creo el boton de anadir y el validador de CSRF
+
+   u: views/propiedades/crear.pug
+   s:
+    form.space-y-2(method="POST" action="/propiedades/crear")
+      input(type="hidden" name="_csrf" value=csrfToken)
+
+     input(class="w-full py-3 bg-indigo-600 hover:bd-indigo-700 rounde text-white font-bold uppercase cursor-pointer" 
+      type="submit" value="Añadir imagen" )
+
+  39.5) antes de todo no olvidar pasar el _CSRF al front 
+  donde se renderiza el formulario de crear propiedad:
+  u: controllers/propiedadController.js
+  s:
+      const crear = async (req, res) => {
+      //consultar modelo de precios y categorias
+      const [categorias, precios] = await Promise.all([Categoria.findAll(), Precio.findAll()]);
+
+      res.render('propiedades/crear', {
+        pagina: 'Crear propiedad',
+        barra: true,
+        csrfToken: req.csrfToken(),// este es importante en los formularios el csrfToken es decir le paso a lavista esto para que cuando haga post no haya errores de csrf
+        categorias,
+        precios,
+      });
+    };
+  39.6) Añadiendo resto de validaciones
+    u: routes/propiedadesRoutes.js
+    s:
+      body('descripcion')
+        .notEmpty()
+        .withMessage('Descripcion no puede ir vacio')
+        .isLength({ max: 50 })
+        .withMessage('La descripcion es muy larga'),
+      body('categoria').isNumeric().withMessage('selecciona una categoria'),
+      body('precio').isNumeric().withMessage('selecciona un rango de precios'),
+      body('habitaciones').isNumeric().withMessage('selecciona una cantidad de Habitaciones'),
+      body('estacionamiento').isNumeric().withMessage('selecciona una cantidad de Estacionamientos'),
+      body('wc').isNumeric().withMessage('selecciona un rango una cantidad de Baños'),
+      body('lat').notEmpty().withMessage('selecciona la propiedad en el mapa'),
+      body('lng').notEmpty().withMessage('selecciona la propiedad en el mapa'),
+  39.7) autorrelleno
+    u: controllers/propiedadController.js
+    n: le paso a la vista lo que viene por body:
+    s:
+      return res.render('propiedades/crear', {
+        ..
+        .
+        datos: req.body
+      });
+    39.7.2) 
+      n: voy a la vista y al value le pongo el valor de el dato 
+      u: views/propiedades/crear.pug
+      s: input#titulo.w-full.px-3.py-3.border.border-gray-300.rounded-xl.placeholder-green-400(placeholder="Titulo Propiedade, ej. Casa en la playa" 
+         type="text" name="titulo" value=datos.titulo?datos.titulo:"" )
+
+      n: //para el textarea que no tiene un Value se coloca afuera osea se le manda un mensaje
+      s:
+         textarea#descripcion.w-full.px-3.py-3.border.border-gray-300.rounded-xl.placeholder-green-400(placeholder="Descripcion" 
+         name="descripcion" )=datos.descripcion?datos.descripcion:""
+
+    39.7.2.2) mucha atencion como al principi de todo no se envia datos
+    puede marcarme un error ya que no estoy mandando "datos" y el front necesita ahora eso
+    en cada field 
+      n: entonces le mandare desde el controler Crear:
+      u: controllers/propiedadController.js
+      s: 
+
+          const crear = async (req, res) => {
+          //consultar modelo de precios y categorias
+          const [categorias, precios] = await Promise.all([Categoria.findAll(), Precio.findAll()]);
+
+          res.render('propiedades/crear', {
+            ...
+            ..
+            datos:{}    //Le mando esto pero vacio
+          });
+        };
+  39.8) autorrelleno para listas con for each
+      u: views/propiedades/crear.pug
+      s: //tengo esto inicialemnte
+        select#categoria.w-full.px-3.py-3.border.border-gray-300.rounded-xl.placeholder-green-400( name="categoria")
+             option(value="") -seleccione-
+              each categoria in categorias
+                option(value=categoria.id)=categoria.nombre
+
+      n:pero entonces necesito que cada vez que se va contruyento las opciones 
+      pase por cada una y verifique si la categoria (en el caso de haber sido seleccionada oviamente)
+      coincide con el id que lleva el "for each"
+      n: el selected pone en subrayado si esta en true
+      s:
+        each categoria in categorias
+                option(value=categoria.id selected=datos.categoria?datos.categoria==
+                categoria.id?true:false
+                :null )=categoria.nombre
+      n: como ven verifico que exista datos.caegoria si no existe entonces null, si existe 
+      busque y indique cual de todas es para ponerle el true y cual no para poerle el false
+      
+      39.8.1)
+        para precios tambien : 
+        s:
+        option(value=precio.id selected=datos.precio?datos.precio==
+                precio.id?true:false
+                :null )=precio.nombre
+      
+      39.8.2) 
+        Para los habitaciones dcon el while y estacionamiento con el while tambien 
+        s:
+        option(value="") -seleccione-
+             - var n = 5; 
+                while n < 10
+                  option(value=n selected=datos.habitaciones?datos.habitaciones==
+                n?true:false
+                :null ) #{n++} 
+
+        option(value="") -seleccione-
+             - var n = 5; 
+                while n < 10
+                  option(value=n selected=datos.estacionamiento?datos.estacionamiento==
+                  n?true:false
+                  :null) #{n++}
+  39.9) autorrelleno del mapa:
+
+
+    u: views/propiedades/crear.pug
+    s:
+          p.calle= datos.calle?datos.calle:''
+          input(type="hidden" name="calle" id="calle" value=datos.calle?datos.calle:'')
+          input(type="hidden" name="lat" id="lat" value=datos.lat?datos.lat:'')
+          input(type="hidden" name="lng" id="lng" value=datos.lng?datos.lng:'')
+    39.9.2)
+      
+      n: para esto tenemos que tener en cuenta que el mapa ya tiene unos datos por defectos 
+      cuando se ejecuta:
+      u: src/js/mapa.js
+      s: //actualmente tiene esto , entonces cada vez que se vuelva a recargar la pagina entonces
+      recargara estos datos
+        const lat = 20.67444163271174;
+        const lng = -103.38739216304566;
+      n: por lo tanto se debe de colocar o reemplazar esto si en caso de que ya haya seleccionado las cordenadas.
+      el front ya tiene los datos.lat y .lng entonces puedo leerlos:
+
+      s:
+        const lat = document.querySelector('#lat').value || 20.67444163271174;
+        const lng = document.querySelector('#lng').value || -103.38739216304566;
+
+  39.10) lectura de datos y  guardado de esa info del formulario
+    u: controllers/propiedadController.js
+    en funcion "guardar"
+    s: primero quito los modelos importados y los agrego desde el archivo : ()
+    s: 
+        import Precio from '../models/Precio.js';  //los quito
+        import Categoria from '../models/Categoria.js';  //los quito
+      import { Precio, Categoria, Propiedad } from '../models/index.js';    //lo pongo 💢
+
+      //__________creando registro
+        console.log(req.body)
+        const {
+          titulo,
+          descripcion,
+          habitaciones,
+          estacionamiento,
+          wc,
+          calle,
+          lat,
+          lng,
+          precio: precioId,  //aqui no es un objeto slo que al hacer destructuring le doy el nombre de "precioId" a esa propiedad destructurada que probiene del body
+          categoria
+        } = req.body; //esto es el destructurin  
+
+        try {
+          const propiedadGuardada = await Propiedad.create({
+            titulo,
+            descripcion,
+            habitaciones,
+            estacionamiento,
+            wc,
+            calle,
+            lat,
+            lng,
+            precioId, //aqui como ya se renombro "precio"  por "precioId" a esa propiedad destructurada que probiene del body, entonces ya la puedo pasar con el nombre, realmente aqui seria precioId: precioId pero como tienen el mismo nombre lo puedo hacer en una solo nombre
+            categoriaId: categoria, //esta es la forma 2 en que le puedo pasar la informacion si viene el nombre de la variable diferente dese el front
+          });
+
+          
+        } catch (error) {
+          console.log(error)
+          
+        }
+
+40) seeder de usuarios
+  u: seed/usuarios.js
+  s: 
+      import bcrypt from 'bcrypt'
+
+        const usuarios = [
+          {
+            nombre: 'juan',
+            email: 'juan@gmail.com',
+            confirmado: 1,
+            password: bcrypt.hashSync('password',10)
+
+          },
+
+        ];
+
+        export default usuarios;
+  40.1) 
+    u:
+        import usuarios from './usuarios.js';
+        import { Categoria, Precio, Usuario } from '../models/index.js' //modificado
+
+        const c=  Usuario.bulkCreate(usuarios)  //modificado
+        await Promise.all([a,b,c])        //modificado
+41) 99. Creando un Custom Middleware para validar Rutas
+    n creeo la siguiente ubicacion 
+    u: middelware/protegerRuta.js
+    s: const protegerRuta = async (req, res, next) => {
+        .....
+        console.log("desde el middelware")
+        next()
+      }
+      export default protegerRuta; 
+  41.2) 
+    u: routes/propiedadesRoutes.js
+    s: 
+      import protegerRuta from '../middelware/protegerRuta.js';
+      router.get('/mis-propiedades', protegerRuta, admin); //auqi se agrega el middelware
+      
+  41.3) ahroa para proteger la ruta con un token valido
+    n: debo leer el token actual, luego verificar
+     si es un token valido y esto se hace con el "verify" 
+    u:
+    s:
+        import jwt from "jsonwebtoken";
+        const protegerRuta = async (req, res, next) => {
+            //comprobar si hay un token 
+            const { _token } = req.cookies;
+            if (!_token) {
+              return res.redirect('/auth/login')  //lo direcciona a la ventana inicio de secion
+
+            }
+            //comprobar el token si es valido 
+            try {
+              const decoded = jwt.verify(_token, process.env.JWT_SECRET) //obtengo o verifico si existe ese token valido que no haya expirado
+              const usuario = await Usuario.findByPk(decoded.id) //encuentro el usuario que se logueo
+              console.log(usuario)
+              
+            } catch (error) {
+              return res.clearCookie('_token').redirect('/auth/login')  //elimina el token que enga y redirecciona al login 
+              
+            }
+            
+
+            next() //next provicional
+            
+
+          }
+
+  41.4) eliminacion de campos en una consulta (lo que no quiero que se muestre en una consulta) 
+    n: se queire eliminar campo contraseña y _token cuando se hace diha consulta 
+    u: models/Usuario.js
+    s:
+      ...
+      hooks: {
+        ....
+      },
+      scopes: {
+        eliminarPassword: {
+          attributes: {
+            exclude: ['password', 'token', 'confirmado', 'createdAt', 'updatedAt'],
+          },
+        },
+      },
+   41.4.2) ahora puedo pasarle esto a la consulta:
+    u: middelware/protegerRuta.js
+    s:
+      //comprobar el token si es valido 
+        try {
+          ---         
+          //agrego entonces el scope: 
+          const usuario = await Usuario.scope('eliminarPassword').findByPk(decoded.id); //encuentro el usuario que se logueo
+          // almacenar ese usuario al req
+          if (usuario) {
+            req.usuario= usuario
+            
+          } else {
+            return res.redirect('auth/login')
+          }
+          return next(); //"reemplazo del next provional"
+
+        } catch (error) {
+          ---
+        }
+
+
+            //next() //next provicional, se quita y se pone en el "reemplazo del next provional"
+
+  41.5) leo las caracteristicas del usuario (usuario logueado) dese el req
+   y luego se la inserto a crear propiedad, al campo "usuarioId"
+      //leo el usuario logeado con el req.usuario y 
+      le cambio a el nombre "usuarioId", 
+      u: controllers/propiedadController.js
+      s:
+        const { id: usuarioId } = req.usuario;
+
+        try {
+          const propiedadGuardada = await Propiedad.create({
+            t.......
+            ..
+            .
+            usuarioId,    //agregado
+            imagen:''     //agregado
+        
+          });
+        } catch (error) {
+          console.log(error);
+        }
+   41.5.2)
+    hora tengo que crear el codigo que redirije luego a otra vista para ello entonces
+    s:
+      //redireccionandome a la vista de eesa propiedad creada
+      const { id } = propiedadGuardada //selecciono el Id de esa rpopiedad
+      res.redirect( '/propiedades/agregar-imagen/{id}') 
+
+
+    n: ahora toca empezar a contruir esta vista 
+
+42) Creando pagina pa agregar imagenes
+  u: routes/propiedadesRoutes.js
+  s: 
+    import { admin, crear, guardar, agregarImagen } from '../controllers/propiedadController.js';
+    router.get('/propiedades/agregar-imagen/:id', agregarImagen)
+
+  42.2)
+    moviendo el codigo para la barra, para hacer el codigo mas utilizable
+
+    42.2.2) creo un layout para que la barra que tenia el "views/layout/index.pug"
+      ahora pueda estar separada y por lo tanto ya no sera el index que se encarg de la barra
+      u: views/layout/admin.pug
+     42.2.2.2) muevo el archivo header a:
+      u: views/layout/includes/header.pug
+      n: renomobro ese archivo:
+      u: views/layout/includes/header-admin.pug
+      n: con el fin que quede separado mas el codigo
+    42.2.3) coloco ahora si en el codigo de 
+      U: views/layout/admin.pug
+      n: es el mismo codigo del views/layout/index.pug
+       solo que ahora esta en este archivo.
+
+      s: doctype html
+        html(lang="en")
+          head
+            meta(charset="UTF-8")
+            meta(http-equiv="X-UA-Compatible", content="IE=edge")
+            meta(name="viewport", content="width=device-width, initial-scale=1.0")
+            title Bienes raices | #{pagina}
+            link(rel="stylesheet", href="/css/app.css")
+            block styles
+
+          body.min-h-screen.bg-gray-50
+            //if barra            // lo elimino
+             include includes/header-admin  // agregado el archivo 
+
+            main(class="mx-auto container mt-10 px-2")
+              block contenido 
+
+            block scripts
+      42.2.3.2)
+        n: se inlcluye el archivo aqui y se borra en el index:
+        u: views/layout/index.pug
+        s:   borro esto porque ya no es necesario  ya que ahora esta es en admin 
+          //- if barra
+          //-  include header
+    42.2.3) ahora como en el elemento que utiliza el layout que muestra la barra es:
+      U. views/propiedades/admin.pug
+      n: entonces tendre que cambiarle que ya no sea el "views/layout/index.pug" sino que sea el "views/layout/admin.pug"
+      s: //ahora ya no extinde desde:extends ../layout/admin
+        // sino que extiende desde
+          extends ../layout/admin
+
+     42.2.3.2)
+      Lo mismo con el resto de archivos:
+      u: views/propiedades/crear.pug
+      s: 
+        extends ../layout/admin
+
+
+      42.2.3.3) ahora ya puedo eliminar de las funciones
+       la variable de "barra":
+       u: controllers/propiedadController.js
+       s: 
+        const admin = (rew, res) => {
+          res.render('propiedades/admin', {
+            pagina: 'mis propiedades',
+            //barra: true, //Borro
+          });
+        };
+
+        const crear = async (req, res) => {
+          res.render('propiedades/crear', {
+            // barra: true,   //Borro
+            }
+
+        }
+        const guardar = async (req, res) => {
+            return res.render('propiedades/crear', {
+              pagina: 'Crear propiedad',
+              // barra: true,
+        }
+
+
+    42.2.3) 
+    u: controllers/propiedadController.js
+    s: 
+      const agregarImagen = async (req, res) => {
+        res.send('agregando imagen ') //solo para el ejemplo y comprobar que se llega hasta aqui
+        res.render('/propiedades/agregar-imagen', {
+        });
+      }
+      export { admin, crear, guardar };
+  42.3) ahora si creando la vista para agregar la imagen 
+    n: creo el archivo de imagen
+    u:  views/propiedades/agregar-imagen.pug
+    s: //copio lo mismo que tengo en "views/propiedades/crear.pug" y me baso en eso para hacer este formulario
+    s:
+      extends ../layout/admin   //esto se cambio ahor extiende desde admin
+      block styles
+      block contenido
+        div
+          h1.text-4xl.my-10.text-center.font-extrabold Bienes
+            sapan.font-normal Raices 
+          h2.text-center.text-2xl.font-extrabold #{pagina}
+        
+          div(class="bg-white shadow  py-8 px-4 rounded mx-auto my-10 max-w-4xl md:px-10 ")
+          form.space-y-2(method="POST" action="/propiedades/crear")
+            input(type="hidden" name="_csrf" value= csrfToken)
+          
+            input(class="w-full py-3 bg-indigo-600 hover:bd-indigo-700 rounde text-white font-bold uppercase cursor-pointer" 
+                  type="submit" value="Publicar propiedad" )
+        div.y-10
+      block scripts
+  42.4)
+      u: controllers/propiedadController.js
+      s:
+        const agregarImagen = async (req, res) => {
+            res.render('propiedades/agregar-imagen', {
+              pagina:"Agregar imagen"
+            });
+            
+        }
+43) añadiendo dropzone que sirve pa agregar archivos 
+  c:
+    npm i dropzone@5.9.3
+  43.1) creo el archivo sonde se va  aagregar la dependencia de dropzone: 
+    u: src/js/agregarimagen.js
+  43.2) voy al webpack y lo agrego 
+  
+    U: webpack.config.js
+    s:
+      entry: {
+        ...
+        agregarImagen: './src/js/agregarimagen.js',  //agregado 
+      },
+   43.2.2) ejecuto el comando nuevamente osea para y ejecuo nuevamente
+    c: npm run dev
+
+  43.3) 
+    u: src/js/agregarimagen.js
+    s:
+      import {Dropzone} from 'dropzone'
+
+  43.4) 
+    u: views/propiedades/agregar-imagen.pug
+    s: 
+        block scripts
+         script(src="/js/agregarImagen.js")
+  43.5) agregando el dropzone al formulario
+    u: views/propiedades/agregar-imagen.pug
+    s: 
+     form(class="dropzone border-dashed border-2 w-full min:h-96 h-auto rounded flex-col justify-center item-center" method="POST" action="/propiedades/crear")
+        input(type=".....
+        input(class="mt-5 ...." ) //le agrego el mt-5
+
+
+    43.5.2) aregando los estilos de dropzone:
+      urL: https://gist.github.com/codigoconjuan/fc549f7f12c1e0baaf684cd4d08342c7
+      u: views/propiedades/agregar-imagen.pug
+      s:  
+        block styles
+          link(rel="stylesheet", href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.3/dropzone.css")
+    43.5.3)  ahora cambio el orden del estilo, opara que tome los estilos de tailwind ya que no los esta tomando 
+      U: views/layout/admin.pug
+      s: 
+        block styles  //primero
+        link(rel="stylesheet", href="/css/app.css") // va de segundo
+44) Validando antes de mostrar o agregar que el usuario corresponda
+  primero verifico las vlaidaciones 
+  u: controllers/propiedadController.js
+  s:
+    const agregarImagen = async (req, res) => {
+
+
+      //validar que propiedad exista
+      const propiedad = await Propiedad.findByPk(id)
+      if (!propiedad) {
+        return res.redirect('/mis-propiedades')
+      }
+
+      //validar que propiedad no este publicada
+      if (propiedad.publicado) {
+        return res.redirect('/mis-propiedades');
+      }
+
+      //validar que propiedad pertenece a quein visita la pafgina
+        console.log(req.usuario.id.toString)  
+        console.log( propiedad.usuarioId.toString)
+        if (req.usuario.id.toString() !== propiedad.usuarioId.toString()) {
+          return res.redirect('/mis-propiedades');
+        }
+
+
+
+    }
+    44.0.2) ojo es recoemndado que al leer datos de id se pasen a string 
+    ya que a veces va a dar problemas si no tienen el mismo tyopo de dato 
+
+          console.log(typeof( req.usuario.id.toString()))
+          console.log(propiedad.usuarioId.toString());
+
+
+    44.1) ojo para que el middleware de proteccion de rutas y que pone al usuario en el "req": request:
+     debo usar el middelware.
+     u: routes/propiedadesRoutes.js
+     s:
+      router.get('/propiedades/agregar-imagen/:id', protegerRuta, agregarImagen); 
+
+
+
+
+
+  /validar que propiedad exista
+45) configurnado dropzone:
+  u: views/propiedades/agregar-imagen.pug
+  s://le agrego el ID a el formulario
+    form(id="imagen" class="dropzone border-dashed border-2 w-full min:h-96 h-auto rounded flex-col justify-center item-center" method="POST" action="/propiedades/crear")
+        input(type="hidden" name="_csrf" value= csrfToken)
+  45.1) 
+    n: lo que configure en el archivo Js afecta a la clase Dropzone(html) 
+    u: src/js/agregarimagen.js
+    s: 
+      import { Dropzone } from 'dropzone'
+      Dropzone.options.imagen = {
+        dictDefaultMessage: 'Sube tus imagenes aqui', //mensaje en el box
+        acceptedFiles: '.png, .jpg, .jpeg', //para determinar el tipo de archivo
+        maxFilesize: 5, //tamaño de el archivo maximo permitido
+        maxFiles: 1, //cantidad de archivos que permite cargar
+        parallelUploads: 1, //debe ser los mismos que maxfiles
+        autoProcessQueue: false, //es el enable para subir, si esta en false hasta que no lo ponga en tru no se sube 
+                                //si esta en true lo que hace es apenas arrastre la imagen o el archivo lo intneta subir
+                                //pero como falta le toquen pues marca el error CSRF toquen 
+        addRemoveLinks: true, //habilita enlace para eliminar el archivo si ya se subi
+        dictRemoveFile: 'Borrar archivo', //cambia el texto de eliminar archivo
+        dictMaxFilesExceeded:'El limite es 1 archivo '//cambia el texto del mensaje de error cuando no se pueden subir mas archivos
+        
+      }
+
+  45.2) ahora su va al navegarodr y 
+    url: http://localhost:3200/propiedades/agregar-imagen/0058c913-ef4f-43f5-a95a-21a2ebcfeb50
+ 
+
+
+  45.3) le mando desde el controles la propiedad:
+    u:controllers/propiedadController.js
+    s:
+      const agregarImagen = async (req, res) => {
+        ...
+
+         res.render('propiedades/agregar-imagen', {
+          pagina: `Agregar imagen: ${propiedad.titulo}`, //Agregado....
+          propiedad   //agregado------
+        });
+
+
+      }
+  45.4) le agrego al formulacion la nueva ruta : action=`/propiedades/agregar-imagen/${id}`
+    u: views/propiedades/agregar-imagen.pug
+    s: 
+      form(id="imagen" class="dropzone border-dashed border-2 w-full min:h-96 h-auto rounded flex-col justify-center item-center" 
+        method="POST" action=`/propiedades/agregar-imagen/${propiedad.id}`)
+   
+    n: si voy al navegador y le doy inspeciionar:
+    url:
+    s:  
+      <form class="dropzone" id="imagen"
+      method="POST" action="/propiedades/agregar-imagen/0058c913-ef4f-43f5-a95a-21a2ebcfeb50">
+
+  45.5) quitnato el error de csrf toquen 
+    U: controllers/propiedadController.js
+    s:
+        const agregarImagen = async (req, res) => {
+          res.render('propiedades/agregar-imagen', {
+          pagina: `Agregar imagen: ${propiedad.titulo}`,
+          propiedad,
+          csrfToken: req.csrfToken(),  //agregado
+    });
+
+    45.5.2) 
+      u: views/propiedades/agregar-imagen.pug
+      s: 
+        form(id="imagen" class="dropzone border-dashed border-2 w-full min:h-96 h-auto rounded flex-col justify-center item-center" 
+          method="POST" action=`/propiedades/agregar-imagen/${propiedad.id}`)
+          input(type="hidden" name="_csrf" value= csrfToken) //-----aqui erecibe el csrf token
+ 
+      45.5.2.2) tambien agregar en el header el csrftoken
+        u: views/propiedades/agregar-imagen.pug
+        s: 
+          block styles
+            link(rel="stylesheet", href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.3/dropzone.css")
+            meta(name='csrf-token' content=csrfToken)  //------agregado
+
+
+        y en le URL ya se va poder ver:
+        :http://localhost:3200/propiedades/agregar-imagen/7a514330-bc3a-4b8d-bb25-432d2663f4a5
+        elements: 
+          <meta name="csrf-token" content="tsdPaB2Y-d7rR27wp5ZZAbkWEY3DiXxoE53s">
+    45.5.3)ahora si para importarlo al codigo de DROPZONE:
+      u: src/js/agregarimagen.js
+      s:
+        //forma 1 de obtener el dato de meta osea ese token:
+        const token = document.querySelector('meta[name="csrf-token"]').content;
+        //forma 2  ----------agregado
+        const token =  document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+        
+        ....
+        ..
+        .//----------agregado
+          headers: {
+            'CSRF-Token':token
+
+          }
+        }
+
+46) Ahora si se coloca el metodo post en la ruta  
+  u: routes/propiedadesRoutes.js
+  s:
+    router.post('/propiedades/agregar-imagen/:id',  (req,res) => {
+      console.log('Subiendo imagen')
+    }); 
+47) Agregando Multer (para poder leer archivos en formulario)
+  n: esto lo que hace es que al igual que en, u: index.js
+      //habilitar lectura de datos de formularios-------
+    app.use(express.urlencoded({ extended: true }));
+
+  n: esto permitia que al dar post, se guarden , sring, numerico pero no permitia archivos, 
+  entonces multer si deja subir archivos
+
+  47.2) INstalacion:
+    c: npm i multer
+  47.3) haciendo el uso a tra veze de un middelware
+    u: middelware/subirImagen.js
+
+    s:
+      import multer from 'multer';
+      import path from 'path'  //algo interno de node para navegar en carpetas
+      import {generarId} from '../helpers/token.js'
+      const storage = multer.diskStorage({
+        //file: es el archivo que se esta subiendo
+        destination: function (req, file, cb) {
+          //error, detination
+          cb(null, './public/uploads/'); //si se llama significa que se subio correctamente la imagen
+        },
+        //es para definir el nombre el cb es un callback propio que se ejcuta cuando se utiliza el multer.diskStorage
+        filename: function (req, file, cb){
+          //path.extname(file.originalname)); me retorna solo la extension 
+          cb(null, generarId() + path.extname(file.originalname));
+        },
+      });
+
+      const upload = multer({ storage }) //aqui cuando se utilice este middelware pero con la configuracion que le estemos pasando "storage"
+
+      export default upload
+
+   47.3.2) ahora tengo que poner el middleware en la ruta 
+    u:routes/propiedadesRoutes.js
+    s: import upload from '../middelware/subirImagen.js'
+
+   tengo que hacer que haya una conexion entre Dropzone
+    U: routes/propiedadesRoutes.js
+    s: 
+      router.post('/propiedades/agregar-imagen/:id',  (req,res) => {
+        //upload.array() //para multiples imagenes
+        upload.single()  //.----------agregado
+        console.log('Subiendo imagen')
+      }); 
+
+   47.3.3)
+    n: tengo que tener algo que permita conectar lo del servidor( lo que esta en google)
+    y que se pueda conectar en el archivo javascript
+    Entonces en dropzone:
+    u:src/js/agregarimagen.js
+    s:
+      ....
+       headers: {
+        'CSRF-Token':token
+      },
+      //agregado
+      paramName: 'imagen'  //tiene que tener el mismo nombre de loq ue se esta uzando en la ruta
+      
+    }
+    47.3.3.2) 
+      u: routes/propiedadesRoutes.js
+      router.post(....
+        ...
+        //el mismon nombre "imagen" 
+        upload.single('imagen')  //-------modificado 
+        console.log('Subiendo imagen')
+      }); 
+    47.3.3.3) 
+        N: como no uso el req ni el res puedo dejar solo el middleware:
+        s:
+          router.post('/propiedades/agregar-imagen/:id',upload.single('imagen')); 
+    
+    47.3.3.4) ojo sii queiro simular o verificar que si siube debo:
+    en la ubicacion de  
+      u: src/js/agregarimagen.js
+      s: ponerlo en true
+        autoProcessQueue: true, //es el enable para subir, s esta en false ahasta que no lo ponga en tru no se sube 
+
+      n: luego en esta ubicaion a se abra subido la imagen 
+      u: public/uploads
+
+
+
+
+
+   
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+   
+  
+    
+
+
+
+
+
 
 
 
@@ -2121,12 +3412,17 @@ info general) estilos co pug:
             			un signo @
 
             	*) md:gap-3: el gap hace que se separae por ejemplo "abc" en "a b c"
-    *) for en pug y select option: mucha atencion porque si le pones let te va a dar un error le puedes cambiar por "var"
-        select#habitacioens.( name="habitacioens")
+    *) while y for en pug y select option: mucha atencion porque si le pones let te va a dar un error le puedes cambiar por "var"
+        select#Habitaciones.( name="Habitaciones")
              option(value="") -seleccione-
              - let n = 1; 
                 while n < 10
                   option(value=n) #{n++} 
+      *) for en pug:
+      each item in items
+          if count < 3
+            li= item.name
+          - count++;
 
 
 
@@ -2149,6 +3445,11 @@ info general) estilos co pug:
 			*) isLength
 			*) withMessage
 			*) equals('password')
+
+
+
+
+
 
 
 //node comandos:
@@ -2192,4 +3493,52 @@ info general) estilos co pug:
 *) si queiro poer en comillas y que el letro tenga comillas debo usar diagonal invertiddo
   " xxxx \"texto\"   xxx"
 
+
+Js, teoria importantes:
+
+*) 
+    export default categorias; 
+    import w from "./categorias"; //puedo importarlo con un nombre cualquiera si es un export default desde donde se llama
+*
+
+*) operador Logical_OR  ( || )
+  si lo de la IZQ  existe toma lo de la izq, sino lo de la derecha
+  ejm:
+     const lat = document.querySelector('#lat').value || 20.67444163271174;
+    const lng = document.querySelector('#lng').value|| -103.38739216304566;
+
+*) Destructuring: en el destructuring puedo renombrar las variables tambien 
+ const {
+    lat
+    lng,
+    precio: precioId,  //aqui no es un objeto slo que al hacer destructuring le doy el nombre de "precioId" a esa propiedad destructurada que probiene del body
+    categoria: categoriaId,
+  } = req.body; //esto es el destructurin  
+
+*) guardado en sequlize (post)
+
+  const {
+      lat,
+      lng,
+      categoria
+      precio: precioId,  //aqui no es un objeto slo que al hacer destructuring le doy el nombre de "precioId" a esa propiedad destructurada que probiene del body
+      
+    } = req.body; 
+
+  const propiedadGuardada = await Propiedad.create({
+        lat: lat                //forma normal
+        categoriaId: categoria, //otro ejemplo de forma normal en que le puedo pasar la informacion si viene el nombre de la variable diferente dese el front
+        lng,  //es como lng:lng  //forma normalB
+        precioId, //aqui como ya se renombro "precio"  por "precioId" a esa propiedad destructurada que probiene del body, entonces ya la puedo pasar con el nombre, realmente aqui seria precioId: precioId pero como tienen el mismo nombre lo puedo hacer en una solo nombre
+      });
+*) para los modelos en sequalize tengo los "hooks": que permiten agregar funcionces a un modelo de usuario
+*) los "scopes" son aquellos que permiten elimnar unos campos a una consulta especifica
+
+*) almacenar informacion en el "req": osea si despues tengo una funcion ya puedo usar (req,res)=>{}
+   ejemplo: 
+    req.usuario= usuario
+
+*)  res.send('agregando imagen ')
+*) res.render('iniciaSin/aLaDireccion')
+*) res.redirect( '/iniciaconbarra/agregar-imagen/{id}')
 

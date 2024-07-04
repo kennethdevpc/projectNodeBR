@@ -26,6 +26,31 @@ introduccion:
   - inicio de crear mapa
   - creacion de archivo que ejecuta varios scrips del packagejson
   - continuacion de mapa
+  - Creando los modelos de propiedad
+  - cree ya categoria precio y seeder
+  - ejecucion del seeder
+  - poniendo la informacion en el formulario: poniendo los datos de precio y categoria en el formulario
+  - relaciones 
+  - relacion belongs to 
+  - creacion del endpoint para enviar la informacion del Crear propiedades
+  -validaciones desde el routin
+  - agregando validaciones a propiedades, autorrelleno de campos que si pasaron validaciones, autoseleccionar los select que si pasaron la validacion 
+  - autorrelleno de la informacion en el mapa
+  - 39.10) lectura de datos y  guardado de esa info del formulario
+  - 40) seeder de usuarios
+  - 41) (99.) Creando un Custom Middleware para validar Rutas
+  - 41.3) ahroa para proteger la ruta con un token valido
+  - 41.4) se coloca el scope en el modelo para poder eliminar algunas columnas de la consultas 
+  - 41.5) leo las caracteristicas del usuario
+  - 42) Creando pagina pa agregar imagenes
+  - 43) añadiendo dropzone
+  - 44) Validando antes de mostrar o agregar que el usuario corresponda
+  - 45) config dropzone
+  - 46) Ahora si se coloca el metodo post en la ruta  
+  - 47) Agregando Multer (para poder leer archivos en formulario)
+  
+  
+
 
 
     ## resteo password:
